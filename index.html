@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>TK JOB BD</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding-bottom: 75px;
+    }
+
+    /* ================= AUTHENTICATION VIEW ================= */
+    .auth-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .auth-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 380px;
+      border-radius: 18px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .auth-header h2 {
+      font-size: 22px;
+      color: #333;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-header p {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: #f0f2f5;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 18px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .auth-tab.active {
+      background: #667eea;
+      color: white;
+    }
+
+    /* Slim Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 0 0 12px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      position: relative;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Three Dots Button */
+    .dots-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 20px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      line-height: 1;
+      transition: background 0.2s;
+    }
+
+    .dots-btn:active {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .header h1 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .header.work-header {
+      background: linear-gradient(135deg, #e52d27 0%, #b31217 100%);
+    }
+
+    /* Content Container */
+    .content-box {
+      padding: 12px 16px 0;
+    }
+
+    /* Notice Banner on Home */
+    .notice-bar {
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      color: #856404;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin: 12px 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      transition: all 0.3s ease;
+    }
+
+    .notice-bar.activated {
+      background: #e6f9ed;
+      border-color: #b7eb8f;
+      color: #155724;
+    }
+
+    .notice-bar .text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .notice-bar .badge {
+      background: #e67e22;
+      color: white;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .notice-bar.activated .badge {
+      background: #22c55e;
+    }
+
+    .notice-bar .action-btn {
+      background: #856404;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Balance Card */
+    .balance-card {
+      background: white;
+      margin: 12px 16px 14px;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .balance-label {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .balance-amount {
+      font-size: 30px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 14px;
+    }
+
+    .income-row {
+      display: flex;
+      justify-content: space-between;
+      background: #f8f9ff;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .income-item {
+      text-align: center;
+      flex: 1;
+    }
+
+    .income-item .label {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 3px;
+    }
+
+    .income-item .value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    /* Sections */
+    .section {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 14px 0 10px;
+      color: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    /* Team */
+    .team-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      background: white;
+      border-radius: 14px;
+      padding: 16px 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .stat-box .num {
+      font-size: 24px;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .stat-box .txt {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* Refer Inside Team */
+    .refer-box-compact {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+
+    .refer-bonus-badge {
+      display: inline-block;
+      background: #ffd700;
+      color: #333;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .refer-input-group {
+      display: flex;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 4px;
+      border-radius: 10px;
+    }
+
+    .refer-input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: white;
+      padding: 8px 10px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .btn-copy-white {
+      background: white;
+      color: #667eea;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    /* ================= WORK SECTION STYLES ================= */
+    .work-rules-banner {
+      background: #fff8e6;
+      border: 1px solid #ffe58f;
+      border-left: 4px solid #fa8c16;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 6px rgba(250, 140, 22, 0.08);
+    }
+
+    .work-rules-banner h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #d46b08;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .work-rules-banner ul {
+      padding-left: 18px;
+      font-size: 12px;
+      color: #614700;
+      line-height: 1.6;
+    }
+
+    /* Tasks UI */
+    .task-card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+      border-left: 5px solid #e52d27;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .task-header h4 {
+      font-size: 16px;
+      color: #1e293b;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .task-subtitle-tag {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-top: 3px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .task-reward {
+      font-size: 13px;
+      font-weight: 700;
+      color: #16a34a;
+      background: #dcfce7;
+      padding: 5px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* ============ ADMIN REFERENCE IMAGES DISPLAY (SPECIAL) ============ */
+    .admin-guide-box {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .admin-guide-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #1e40af;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .admin-guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+    }
+
+    .admin-guide-card {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      background: #0f172a;
+      border: 1.5px solid #93c5fd;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .admin-guide-card:active {
+      transform: scale(0.96);
+    }
+
+    .admin-guide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .admin-guide-overlay-tag {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .task-desc-box {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px dashed #cbd5e1;
+      font-size: 12.5px;
+      color: #334155;
+      line-height: 1.55;
+    }
+
+    .task-block-title {
+      font-weight: 700;
+      font-size: 12px;
+      color: #1e293b;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .task-details-text {
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #475569;
+    }
+
+    .task-specific-rules {
+      margin-top: 8px;
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      border-left: 3px solid #ef4444;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #991b1b;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .btn-task-open {
+      flex: 1;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .btn-task-submit {
+      flex: 1;
+      background: linear-gradient(135deg, #e52d27 0%, #b31217 100%);
+      color: white;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .empty-work-card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px dashed #e2e8f0;
+    }
+
+    .empty-work-icon {
+      font-size: 46px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      background: white;
+      color: #667eea;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-full {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .btn-success {
+      background: #22c55e;
+      color: white;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    /* Forms */
+    .tabs {
+      display: flex;
+      background: white;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 9px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .tab.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      background: white;
+    }
+
+    .quick-amounts {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      flex: 1;
+      min-width: 60px;
+      padding: 8px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      background: white;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .quick-btn:active, .quick-btn.selected {
+      border-color: #667eea;
+      background: #f0f2ff;
+      color: #667eea;
+    }
+
+    .pay-number-card {
+      background: #fdf6ec;
+      border: 1.5px dashed #f39c12;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .pay-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+    }
+
+    .pay-item:not(:last-child) {
+      border-bottom: 1px dashed #e8d0b3;
+    }
+
+    .pay-badge-bkash {
+      background: #e2136e;
+      color: white;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .pay-badge-nagad {
+      background: #f7941d;
+      color: white;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .pay-num-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #222;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-mini-copy {
+      background: #ffffff;
+      border: 1px solid #ccc;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* History Lists */
+    .history-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .hist-tab-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #e0e0e0;
+      background: #fff;
+      cursor: pointer;
+      text-align: center;
+      color: #666;
+    }
+
+    .hist-tab-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .no-history-text {
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      padding: 12px 0;
+    }
+
+    /* Profile Header Card */
+    .profile-banner-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+    }
+
+    .profile-avatar-large {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: white;
+      color: #667eea;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .profile-info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+    }
+
+    .profile-info-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .profile-info-row .p-label {
+      color: #666;
+      font-weight: 500;
+    }
+
+    .profile-info-row .p-value {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+      z-index: 100;
+      border-top: 1px solid #eee;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 11px;
+      color: #999;
+      cursor: pointer;
+      padding: 2px 10px;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active {
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .nav-item.work-nav.active {
+      color: #ff0000;
+    }
+
+    .nav-item .icon {
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: #1a1a1a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 13px;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Popup Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 360px;
+      border-radius: 16px;
+      padding: 20px 18px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-icon {
+      width: 50px;
+      height: 50px;
+      background: #fff3cd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 10px;
+      color: #e67e22;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: #888;
+      font-size: 13px;
+      margin-top: 10px;
+      cursor: pointer;
+      padding: 6px;
+      display: block;
+      width: 100%;
+    }
+
+    /* Side Drawer */
+    .side-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .side-menu-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -290px;
+      width: 280px;
+      height: 100%;
+      background: white;
+      z-index: 2001;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+      transition: left 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-menu.open {
+      left: 0;
+    }
+
+    .side-menu-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 24px 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .side-menu-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .side-user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .side-menu-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .side-info-card {
+      background: #f8f9fc;
+      border-radius: 12px;
+      padding: 12px 14px;
+      border: 1px solid #edf2f7;
+    }
+
+    .side-info-item {
+      padding: 8px 0;
+      border-bottom: 1px dashed #e2e8f0;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .side-info-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .side-info-label {
+      color: #718096;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .side-info-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d3748;
+      word-break: break-all;
+    }
+
+    .side-menu-footer {
+      margin-top: 15px;
+    }
+
+    /* Image Lightbox (Full Screen Zoom View) */
+    #imageLightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      flex-direction: column;
+    }
+
+    #imageLightbox img {
+      max-width: 95%;
+      max-height: 85vh;
+      border-radius: 10px;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.8);
+      object-fit: contain;
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+
+  <!-- FIREBASE SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+  <!-- ==================== IMAGE LIGHTBOX (ফুল স্ক্রিন ছবি ভিউ) ==================== -->
+  <div id="imageLightbox" onclick="closeLightbox()">
+    <button class="lightbox-close-btn" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt="Screenshot Full View" onclick="event.stopPropagation()" />
+    <p style="color:#ddd; font-size:12px; margin-top:10px;">স্ক্রিনের বাইরে ক্লিক করলে বন্ধ হবে</p>
+  </div>
+
+  <!-- ==================== AUTH VIEW ==================== -->
+  <div id="authView" class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>TK JOB BD</h2>
+        <p id="authSubtitle">আপনার অ্যাকাউন্টে লগইন করুন</p>
+      </div>
+
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">লগইন</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">রেজিস্ট্রেশন</div>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm">
+        <div class="form-group">
+          <label>মোবাইল নম্বর</label>
+          <input type="text" id="loginPhone" placeholder="01XXXXXXXXX" />
+        </div>
+        <div class="form-group">
+          <label>পাসওয়ার্ড</label>
+          <input type="password" id="loginPass" placeholder="পাসওয়ার্ড দিন" />
+        </div>
+        <button class="btn btn-primary btn-full" style="margin-top:10px;" onclick="doFirebaseLogin()">লগইন করুন</button>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerForm" style="display:none;">
+        <div class="form-group">
+          <label>পুরো নাম</label>
+          <input type="text" id="regName" placeholder="যেমন: রহিম উদ্দিন" />
+        </div>
+        <div class="form-group">
+          <label>মোবাইল নম্বর</label>
+          <input type="text" id="regPhone" placeholder="01XXXXXXXXX" />
+        </div>
+        <div class="form-group">
+          <label>পাসওয়ার্ড (নূন্যতম ৬ অক্ষর)</label>
+          <input type="password" id="regPass" placeholder="গোপন পাসওয়ার্ড লিখুন" />
+        </div>
+        <div class="form-group">
+          <label>রেফার কোড (৬ সংখ্যার কোড, যদি থাকে)</label>
+          <input type="number" id="regRef" placeholder="যেমন: 582914" />
+        </div>
+        <button class="btn btn-primary btn-full" style="margin-top:10px;" onclick="doFirebaseRegister()">রেজিস্ট্রেশন করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APPLICATION VIEW ==================== -->
+  <div id="mainApp" style="display:none;">
+
+    <!-- SIDE-DRAWER -->
+    <div class="side-menu-overlay" id="sideMenuOverlay" onclick="closeSideMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+      <div class="side-menu-header">
+        <div>
+          <div class="side-user-avatar" id="sideAvatar">র</div>
+          <div style="font-size: 16px; font-weight: 700;" id="sideUserName">রহিম উদ্দিন</div>
+          <div style="font-size: 11px; opacity: 0.85;" id="sideUserId">ID: #USR...</div>
+        </div>
+        <button class="side-menu-close" onclick="closeSideMenu()">✕</button>
+      </div>
+
+      <div class="side-menu-body">
+        <div>
+          <div style="font-size: 12px; font-weight: 700; color: #4a5568; margin-bottom: 10px;">👤 প্রোফাইল ও ইউজার তথ্য</div>
+          
+          <div class="side-info-card">
+            <div class="side-info-item">
+              <span class="side-info-label">নাম</span>
+              <span class="side-info-value" id="sideDetailName">রহিম উদ্দিন</span>
+            </div>
+            <div class="side-info-item">
+              <span class="side-info-label">মোবাইল নম্বর</span>
+              <span class="side-info-value" id="sideDetailPhone">01712-XXXXXX</span>
+            </div>
+            <div class="side-info-item">
+              <span class="side-info-label">স্ট্যাটাস</span>
+              <span class="side-info-value sideMenuAccountStatus" id="sideDetailStatus" style="color:#e67e22;">পেন্ডিং (১৫০৳ ডিপোজিট আবশ্যক)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-menu-footer">
+          <button class="btn btn-danger btn-full" onclick="doFirebaseLogout()">🚪 লগআউট</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVATION MODAL -->
+    <div id="activationModal" class="modal-overlay" style="display:none;">
+      <div class="modal-card">
+        <div class="modal-icon">🔔</div>
+        <h3 style="font-size:16px; margin-bottom:6px;">অ্যাকাউন্ট অ্যাক্টিভেশন</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:16px;">আপনার অ্যাকাউন্টটি চালু করতে <strong>১৫০ টাকা</strong> ডিপোজিট করুন।</p>
+        <button class="btn btn-primary btn-full" onclick="goToDeposit(150)">এখনই ডিপোজিট করুন</button>
+        <button class="modal-close-btn" onclick="closeModal()">পরে করব</button>
+      </div>
+    </div>
+
+    <!-- TASK SCREENSHOT SUBMISSION MODAL -->
+    <div id="taskSubmitModal" class="modal-overlay" style="display:none;">
+      <div class="modal-card" style="text-align: left; max-width: 370px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <h3 style="font-size:16px; color:#1a1a1a;" id="submitModalTitle">কাজের বিবরণ ও প্রমাণ</h3>
+            <div style="font-size:11px; color:#64748b;" id="submitModalSubtitle"></div>
+          </div>
+          <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#888;" onclick="closeTaskModal()">✕</button>
+        </div>
+
+        <div style="background:#f1f5f9; padding:12px; border-radius:10px; margin-bottom:12px; font-size:12.5px; color:#334155; line-height:1.5;">
+          <div style="font-weight:700; color:#0f172a; margin-bottom:4px;">📋 অ্যাডমিনের কাজের পূর্ণ বিবরণ:</div>
+          <div id="submitModalDesc" class="task-details-text">বিস্তারিত লোড হচ্ছে...</div>
+          
+          <!-- Task specific rules inside modal -->
+          <div id="submitModalRulesBox" class="task-specific-rules" style="display:none;"></div>
+
+          <!-- Modal Admin Screenshots Preview -->
+          <div id="submitModalScreenshotsArea" style="margin-top:10px; display:none;">
+            <div style="font-size:11.5px; font-weight:700; color:#1e40af; margin-bottom:6px;">🖼️ অ্যাডমিনের কাজের ছবি (ক্লিক করে বড় দেখুন):</div>
+            <div id="submitModalScreenshotsGrid" class="admin-guide-grid"></div>
+          </div>
+
+          <div style="margin-top:10px; font-weight:700; color:#16a34a; font-size:13px;" id="submitModalReward">পুরস্কার: ৳ 0</div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <a id="submitModalLink" href="#" target="_blank" class="btn btn-primary btn-full" style="display:block; text-align:center; padding:9px; text-decoration:none; font-size:13px; margin-bottom:10px;">
+            🔗 কাজের মূল লিংকে যান
+          </a>
+        </div>
+
+        <!-- Dynamic User Screenshot Inputs Container -->
+        <div id="userProofScreenshotsContainer"></div>
+
+        <div class="form-group">
+          <label>প্রয়োজনে নোট লিখুন (অপশনাল)</label>
+          <input type="text" id="taskProofNote" placeholder="যেমন: কাজ সম্পন্ন করেছি" />
+        </div>
+
+        <button class="btn btn-success btn-full" style="margin-top:6px;" onclick="submitTaskProof()">✅ স্ক্রিনশট জমা দিন</button>
+        <button class="modal-close-btn" onclick="closeTaskModal()">বাতিল করুন</button>
+      </div>
+    </div>
+
+    <!-- 1. HOME SECTION -->
+    <div id="home" class="section active">
+      <div class="header">
+        <div class="header-left">
+          <button class="dots-btn" onclick="openSideMenu()" title="প্রোফাইল মেনু">&#8942;</button>
+          <h1>TK JOB BD 👋</h1>
+        </div>
+      </div>
+
+      <div class="notice-bar" id="homeNoticeBar">
+        <div class="text">
+          <span class="badge" id="noticeBadge">জরুরি</span>
+          <span id="noticeText">অ্যাকাউন্ট অ্যাক্টিভ করতে ১৫০ টাকা ডিপোজিট করুন।</span>
+        </div>
+        <button class="action-btn" id="noticeBtn" onclick="goToDeposit(150)">ডিপোজিট</button>
+      </div>
+
+      <div class="balance-card">
+        <div class="balance-label">মূল ব্যালেন্স</div>
+        <div class="balance-amount">৳ <span id="mainBalance">0</span></div>
+        <div class="income-row">
+          <div class="income-item">
+            <div class="label">Work আয়</div>
+            <div class="value" id="workIncome">৳ 0</div>
+          </div>
+          <div class="income-item">
+            <div class="label">রেফারেল আয়</div>
+            <div class="value" id="refIncome">৳ 0</div>
+          </div>
+          <div class="income-item">
+            <div class="label">মোট আয়</div>
+            <div class="value" id="totalIncome">৳ 0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-box" style="padding-top: 0;">
+        <div class="section-title">
+          <span>আজকের অফার</span>
+        </div>
+        <div class="card" style="display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color:#054b2d; padding:12px 14px;">
+          <div>
+            <div style="font-weight:700; font-size:14px;">প্রতি রেফারে ১০০ টাকা বোনাস 🎁</div>
+            <div style="font-size:11px; opacity:0.9;">টিম সেকশন থেকে লিংক শেয়ার করুন</div>
+          </div>
+          <button class="btn" style="background:#054b2d; color:white; padding:6px 14px; font-size:12px;" onclick="navClick('team', document.getElementById('nav-team'))">রেফার করুন</button>
+        </div>
+
+        <div class="section-title">সাম্প্রতিক লেনদেন</div>
+        <div class="card" id="homeRecentTransactions">
+          <div class="no-history-text">এখনো কোনো লেনদেন হয়নি</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. TEAM SECTION -->
+    <div id="team" class="section">
+      <div class="header">
+        <div class="header-left">
+          <button class="dots-btn" onclick="openSideMenu()" title="প্রোফাইল মেনু">&#8942;</button>
+          <h1>টিম ও রেফারেল</h1>
+        </div>
+      </div>
+
+      <div class="content-box">
+        <div class="refer-box-compact">
+          <span class="refer-bonus-badge">🎁 প্রতি সফল রেফারে ১০০ টাকা বোনাস!</span>
+          <p style="font-size: 12px; opacity: 0.95; margin-bottom: 12px;">আপনার ৬ সংখ্যার রেফার কোড যুক্ত লিংকের মাধ্যমে যে কেউ যুক্ত হলেই পাবেন ১০০৳ কমিশন।</p>
+          
+          <div class="refer-input-group">
+            <input type="text" id="refLinkTeam" value="" readonly />
+            <button class="btn-copy-white" onclick="copyReferralLink()">কপি লিংক</button>
+          </div>
+        </div>
+
+        <div class="team-stats">
+          <div class="stat-box">
+            <div class="num" id="totalMembers">0</div>
+            <div class="txt">মোট সদস্য</div>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="totalRefReward">৳ 0</div>
+            <div class="txt">মোট রেফার বোনাস</div>
+          </div>
+        </div>
+
+        <div class="section-title">রেফার করা সদস্যরা</div>
+        <div class="card" id="teamMemberList">
+          <div class="no-history-text">কোনো টিম মেম্বার যুক্ত হয়নি</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. WORK SECTION -->
+    <div id="work" class="section">
+      <div class="header work-header">
+        <div class="header-left">
+          <button class="dots-btn" onclick="openSideMenu()" title="প্রোফাইল মেনু">&#8942;</button>
+          <h1>Work & Tasks 🎬</h1>
+        </div>
+      </div>
+
+      <div class="content-box">
+        
+        <!-- কাজের সাধারণ নিয়মাবলী ব্যানার -->
+        <div class="work-rules-banner">
+          <h4>📜 কাজের সাধারণ নিয়মাবলী ও নির্দেশিকা:</h4>
+          <ul>
+            <li>অ্যাডমিনের দেওয়া কাজের ছবি/থাম্বনেইল ও বিবরণ দেখে সঠিক কাজটি খুঁজুন।</li>
+            <li>লিংকে গিয়ে কাজ সঠিকভাবে সম্পন্ন করে স্ক্রিনশট প্রুফ জমা দিন।</li>
+            <li>অ্যাডমিন স্ক্রিনশট ভেরিফাই করে আপনার মূল ব্যালেন্সে টাকা যুক্ত করবেন।</li>
+          </ul>
+        </div>
+
+        <div class="section-title" style="margin-top: 5px;">
+          <span>অ্যাডমিন থেকে নির্ধারিত কাজসমূহ</span>
+        </div>
+        
+        <div id="workTasksList">
+          <div class="empty-work-card" id="emptyWorkPlaceholder">
+            <div class="empty-work-icon">⏳</div>
+            <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">বর্তমানে কোনো কাজ নেই</h3>
+            <p style="font-size: 13px; color: #718096; line-height: 1.5;">অ্যাডমিন প্যানেল থেকে কোনো কাজ দেওয়া হলে এখানে দেখতে পাবেন।</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. WALLET SECTION -->
+    <div id="wallet" class="section">
+      <div class="header">
+        <div class="header-left">
+          <button class="dots-btn" onclick="openSideMenu()" title="প্রোফাইল মেনু">&#8942;</button>
+          <h1>ওয়ালেট</h1>
+        </div>
+      </div>
+
+      <div class="content-box">
+        <div class="tabs">
+          <div class="tab active" id="tabDeposit" onclick="switchWalletTab('deposit')">ডিপোজিট</div>
+          <div class="tab" id="tabWithdraw" onclick="switchWalletTab('withdraw')">উইথড্র</div>
+        </div>
+
+        <!-- Deposit Form -->
+        <div id="depositForm">
+          <div class="pay-number-card">
+            <div style="font-size:12px; font-weight:700; color:#b45309; margin-bottom:6px;">📲 ডিপোজিট করার নম্বর (Send Money):</div>
+            
+            <div class="pay-item">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="pay-badge-bkash">bKash</span>
+                <span class="pay-num-text">01317736548</span>
+              </div>
+              <button class="btn-mini-copy" onclick="copyText('01317736548', 'বিকাশ নম্বর কপি হয়েছে!')">কপি</button>
+            </div>
+
+            <div class="pay-item">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="pay-badge-nagad">Nagad</span>
+                <span class="pay-num-text">01333803069</span>
+              </div>
+              <button class="btn-mini-copy" onclick="copyText('01333803069', 'নগদ নম্বর কপি হয়েছে!')">কপি</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="form-group">
+              <label>পরিমাণ (৳)</label>
+              <input type="number" id="depositAmount" placeholder="যেমন: 150" value="150" />
+            </div>
+            <div class="quick-amounts">
+              <div class="quick-btn selected" onclick="setAmount('deposit',150)">৳১৫০ (অ্যাক্টিভ)</div>
+              <div class="quick-btn" onclick="setAmount('deposit',500)">৳৫০০</div>
+              <div class="quick-btn" onclick="setAmount('deposit',1000)">৳১০০০</div>
+              <div class="quick-btn" onclick="setAmount('deposit',2000)">৳২০০০</div>
+            </div>
+            <div class="form-group">
+              <label>পেমেন্ট মেথড</label>
+              <select id="depositMethod">
+                <option value="বিকাশ">বিকাশ (bKash) - 01317736548</option>
+                <option value="নগদ">নগদ (Nagad) - 01333803069</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>যে নম্বর থেকে টাকা পাঠিয়েছেন (Sender Number)</label>
+              <input type="text" id="depositSenderNum" placeholder="01XXXXXXXXX" />
+            </div>
+            <div class="form-group">
+              <label>পেমেন্টের স্ক্রিনশট (Payment Screenshot)</label>
+              <input type="file" id="depositScreenshot" accept="image/*" />
+            </div>
+            <button class="btn btn-primary btn-full" onclick="doDeposit()">ডিপোজিট সাবমিট করুন</button>
+          </div>
+        </div>
+
+        <!-- Withdraw Form -->
+        <div id="withdrawForm" style="display:none;">
+          <div class="card">
+            <div class="form-group">
+              <label>পরিমাণ (৳)</label>
+              <input type="number" id="withdrawAmount" placeholder="যেমন: 500" />
+            </div>
+            <div class="quick-amounts">
+              <div class="quick-btn" onclick="setAmount('withdraw',500)">৳৫০০</div>
+              <div class="quick-btn" onclick="setAmount('withdraw',1000)">৳১০০০</div>
+              <div class="quick-btn" onclick="setAmount('withdraw',2000)">৳২০০০</div>
+            </div>
+            <div class="form-group">
+              <label>উইথড্র মেথড</label>
+              <select id="withdrawMethod">
+                <option value="বিকাশ">বিকাশ (bKash)</option>
+                <option value="নগদ">নগদ (Nagad)</option>
+                <option value="রকেট">রকেট (Rocket)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>উইথড্র অ্যাকাউন্ট নম্বর</label>
+              <input type="text" id="accountNumber" placeholder="01XXXXXXXXX" />
+            </div>
+            <button class="btn btn-success btn-full" onclick="doWithdraw()">উইথড্র করুন</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. PROFILE SECTION -->
+    <div id="profile" class="section">
+      <div class="header">
+        <div class="header-left">
+          <button class="dots-btn" onclick="openSideMenu()" title="প্রোফাইল মেনু">&#8942;</button>
+          <h1>আমার প্রোফাইল 👤</h1>
+        </div>
+      </div>
+
+      <div class="content-box">
+        <div class="profile-banner-card">
+          <div class="profile-avatar-large" id="profileAvatarLarge">র</div>
+          <h2 style="font-size: 18px; font-weight: 700;" id="profileCardName">রহিম উদ্দিন</h2>
+          <p style="font-size: 12px; opacity: 0.9; margin-top: 2px;" id="profileCardUid">UID: #USR...</p>
+        </div>
+
+        <div class="section-title">ব্যক্তিগত তথ্য</div>
+        <div class="card">
+          <div class="profile-info-row">
+            <span class="p-label">👤 পুরো নাম:</span>
+            <span class="p-value" id="profileDetailName">রহিম উদ্দিন</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="p-label">🆔 ইউজার আইডি:</span>
+            <span class="p-value" id="profileDetailUid">#USR28491</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="p-label">📱 মোবাইল নম্বর:</span>
+            <span class="p-value" id="profileDetailPhone">01712-XXXXXX</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="p-label">⚡ অ্যাকাউন্ট স্ট্যাটাস:</span>
+            <span class="p-value" id="profileAccountStatus" style="color: #e67e22; font-weight: 700;">পেন্ডিং</span>
+          </div>
+        </div>
+
+        <div class="section-title">লেনদেন হিস্ট্রি</div>
+        <div class="history-tabs">
+          <div class="hist-tab-btn active" id="btnDepositHist" onclick="toggleHistory('deposit')">ডিপোজিট হিস্ট্রি</div>
+          <div class="hist-tab-btn" id="btnWithdrawHist" onclick="toggleHistory('withdraw')">উইথড্র হিস্ট্রি</div>
+        </div>
+
+        <div id="depositHistoryList" class="card">
+          <div class="no-history-text" id="noDepositText">কোনো ডিপোজিট হিস্ট্রি নেই</div>
+        </div>
+
+        <div id="withdrawHistoryList" class="card" style="display:none;">
+          <div class="no-history-text" id="noWithdrawText">কোনো উইথড্র হিস্ট্রি নেই</div>
+        </div>
+
+        <div style="margin: 18px 0 10px;">
+          <button class="btn btn-danger btn-full" onclick="doFirebaseLogout()">🚪 লগআউট করুন</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+      <div class="nav-item active" id="nav-home" onclick="navClick('home', this)">
+        <div class="icon">🏠</div>
+        <div>হোম</div>
+      </div>
+      <div class="nav-item" id="nav-team" onclick="navClick('team', this)">
+        <div class="icon">👥</div>
+        <div>টিম</div>
+      </div>
+      <div class="nav-item work-nav" id="nav-work" onclick="navClick('work', this)">
+        <div class="icon">🎬</div>
+        <div>Work</div>
+      </div>
+      <div class="nav-item" id="nav-wallet" onclick="navClick('wallet', this)">
+        <div class="icon">💰</div>
+        <div>ওয়ালেট</div>
+      </div>
+      <div class="nav-item" id="nav-profile" onclick="navClick('profile', this)">
+        <div class="icon">👤</div>
+        <div>প্রোফাইল</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ========================================================
+    // 1. FIREBASE CONFIGURATION
+    // ========================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAlRPIeeZ1i3CUDHCbefZKgkAke5WnpXyE",
+      authDomain: "tk-job-bd.firebaseapp.com",
+      databaseURL: "https://tk-job-bd-default-rtdb.firebaseio.com",
+      projectId: "tk-job-bd",
+      storageBucket: "tk-job-bd.firebasestorage.app",
+      messagingSenderId: "755694063017",
+      appId: "1:755694063017:web:a5a0991805b5150630c8b8",
+      measurementId: "G-D9D99HL82H"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+    const database = firebase.database();
+
+    // ========================================================
+    // 2. GLOBAL APP STATE
+    // ========================================================
+    let currentUser = null;
+    let currentSelectedTask = null;
+    window.allLoadedTasks = {}; // স্টোরে টাস্ক জমা রাখার অবজেক্ট
+
+    let state = {
+      name: "ব্যবহারকারী",
+      phone: "",
+      uid: "",
+      referralCode: "",
+      isActive: false,
+      balance: 0,
+      workIncome: 0,
+      refIncome: 0,
+      totalIncome: 0
+    };
+
+    function cleanPhone(phone) {
+      return phone.replace(/[^0-9]/g, '');
+    }
+
+    // URL থেকে রেফার কোড রিসিভ
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refParam = urlParams.get('ref');
+      if (refParam) {
+        const regRefInput = document.getElementById('regRef');
+        if (regRefInput) {
+          regRefInput.value = refParam.replace(/[^0-9]/g, '');
+          switchAuthTab('register');
+        }
+      }
+    });
+
+    // ========================================================
+    // 3. AUTHENTICATION LOGIC
+    // ========================================================
+    function switchAuthTab(type) {
+      const tabLog = document.getElementById('tabLogin');
+      const tabReg = document.getElementById('tabRegister');
+      const logForm = document.getElementById('loginForm');
+      const regForm = document.getElementById('registerForm');
+      const subTitle = document.getElementById('authSubtitle');
+
+      if (type === 'login') {
+        tabLog.classList.add('active');
+        tabReg.classList.remove('active');
+        logForm.style.display = 'block';
+        regForm.style.display = 'none';
+        subTitle.innerText = "আপনার অ্যাকাউন্টে লগইন করুন";
+      } else {
+        tabReg.classList.add('active');
+        tabLog.classList.remove('active');
+        logForm.style.display = 'none';
+        regForm.style.display = 'block';
+        subTitle.innerText = "নতুন অ্যাকাউন্ট তৈরি করুন";
+      }
+    }
+
+    function generateNumericReferralCode() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    function doFirebaseRegister() {
+      const name = document.getElementById('regName').value.trim();
+      let phone = cleanPhone(document.getElementById('regPhone').value.trim());
+      const pass = document.getElementById('regPass').value;
+      let refCode = document.getElementById('regRef').value.trim().replace(/[^0-9]/g, '');
+
+      if (!name) return showToast('আপনার পুরো নাম লিখুন');
+      if (!phone || phone.length < 11) return showToast('সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন');
+      if (!pass || pass.length < 6) return showToast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে');
+
+      const authEmail = `${phone}@tkjobbd.com`;
+      showToast('অ্যাকাউন্ট তৈরি হচ্ছে...');
+
+      const uniqueNumericRef = generateNumericReferralCode();
+
+      auth.createUserWithEmailAndPassword(authEmail, pass)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          const userUid = user.uid;
+
+          const userData = {
+            name: name,
+            phone: phone,
+            uid: userUid,
+            referralCode: uniqueNumericRef,
+            referredBy: refCode || 'NONE',
+            isActive: false,
+            balance: 0,
+            workIncome: 0,
+            refIncome: 0,
+            totalIncome: 0,
+            createdAt: firebase.database.ServerValue.TIMESTAMP
+          };
+
+          return database.ref('users/' + userUid).set(userData).then(() => {
+            if (refCode && refCode !== '') {
+              database.ref('users').orderByChild('referralCode').equalTo(refCode).once('value', (snap) => {
+                if (snap.exists()) {
+                  snap.forEach((referrerSnap) => {
+                    const referrerUid = referrerSnap.key;
+                    const rData = referrerSnap.val();
+                    const updatedBalance = (rData.balance || 0) + 100;
+                    const updatedRefIncome = (rData.refIncome || 0) + 100;
+                    const updatedTotalIncome = (rData.totalIncome || 0) + 100;
+
+                    database.ref('users/' + referrerUid).update({
+                      balance: updatedBalance,
+                      refIncome: updatedRefIncome,
+                      totalIncome: updatedTotalIncome
+                    });
+
+                    database.ref('referrals/' + referrerUid).push({
+                      memberUid: userUid,
+                      memberName: name,
+                      memberPhone: phone,
+                      bonus: 100,
+                      timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+                  });
+                }
+              });
+            }
+          });
+        })
+        .then(() => {
+          showToast('রেজিস্ট্রেশন সফল হয়েছে!');
+        })
+        .catch((error) => {
+          console.error(error);
+          if (error.code === 'auth/email-already-in-use') {
+            showToast('এই মোবাইল নম্বরে ইতিমধ্যে অ্যাকাউন্ট আছে! লগইন করুন');
+          } else {
+            showToast(error.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
+          }
+        });
+    }
+
+    function doFirebaseLogin() {
+      let phone = cleanPhone(document.getElementById('loginPhone').value.trim());
+      const pass = document.getElementById('loginPass').value;
+
+      if (!phone || phone.length < 11) return showToast('সঠিক মোবাইল নম্বর দিন');
+      if (!pass) return showToast('পাসওয়ার্ড লিখুন');
+
+      const authEmail = `${phone}@tkjobbd.com`;
+      showToast('লগইন হচ্ছে...');
+
+      auth.signInWithEmailAndPassword(authEmail, pass)
+        .then(() => {
+          showToast('সফলভাবে লগইন হয়েছে!');
+        })
+        .catch((error) => {
+          console.error(error);
+          showToast('ভুল মোবাইল নম্বর বা পাসওয়ার্ড!');
+        });
+    }
+
+    function doFirebaseLogout() {
+      auth.signOut().then(() => {
+        closeSideMenu();
+        showToast('লগআউট সম্পন্ন হয়েছে');
+      });
+    }
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('authView').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+
+        database.ref('users/' + user.uid).on('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            state.name = data.name || "ব্যবহারকারী";
+            state.phone = data.phone || "";
+            state.uid = data.uid || user.uid;
+            state.referralCode = (data.referralCode || "").toString();
+            state.isActive = data.isActive || false;
+            state.balance = data.balance || 0;
+            state.workIncome = data.workIncome || 0;
+            state.refIncome = data.refIncome || 0;
+            state.totalIncome = data.totalIncome || 0;
+
+            syncUserDataToUI();
+            updateUI();
+          }
+        });
+
+        loadReferralTeam(user.uid);
+        loadWorkTasks();
+      } else {
+        currentUser = null;
+        document.getElementById('authView').style.display = 'flex';
+        document.getElementById('mainApp').style.display = 'none';
+      }
+    });
+
+    function loadReferralTeam(uid) {
+      database.ref('referrals/' + uid).on('value', (snap) => {
+        const container = document.getElementById('teamMemberList');
+        const members = snap.val();
+        let count = 0;
+        let bonusTotal = 0;
+
+        if (!members) {
+          container.innerHTML = `<div class="no-history-text">কোনো টিম মেম্বার যুক্ত হয়নি</div>`;
+          document.getElementById('totalMembers').innerText = '0';
+          document.getElementById('totalRefReward').innerText = '৳ 0';
+          return;
+        }
+
+        container.innerHTML = '';
+        for (let k in members) {
+          count++;
+          const m = members[k];
+          bonusTotal += (m.bonus || 100);
+          const item = document.createElement('div');
+          item.className = 'history-item';
+          item.innerHTML = `
+            <div>
+              <div style="font-weight:600; font-size:13px;">${m.memberName}</div>
+              <div style="font-size:11px; color:#888;">${m.memberPhone}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-weight:700; font-size:13px; color:#22c55e;">+ ৳${m.bonus || 100}</div>
+              <span class="status-badge" style="background:#e6f9ed; color:#155724;">সফল রেফার</span>
+            </div>
+          `;
+          container.appendChild(item);
+        }
+
+        document.getElementById('totalMembers').innerText = count;
+        document.getElementById('totalRefReward').innerText = `৳ ${bonusTotal}`;
+      });
+    }
+
+    // ========================================================
+    // 4. ADMIN IMAGES EXTRACTION & WORK TASKS
+    // ========================================================
+    function extractAdminScreenshots(item) {
+      let list = [];
+      if (!item) return list;
+
+      // ১. অ্যারে থেকে images রিড করা
+      if (Array.isArray(item.images)) {
+        list = list.concat(item.images);
+      } else if (typeof item.images === 'object' && item.images !== null) {
+        list = list.concat(Object.values(item.images));
+      } else if (typeof item.images === 'string' && item.images.length > 5) {
+        list = list.concat(item.images.includes(',') && !item.images.startsWith('data:image') ? item.images.split(',').map(s => s.trim()) : [item.images.trim()]);
+      }
+
+      // ২. screenshots রিড করা
+      if (Array.isArray(item.screenshots)) {
+        list = list.concat(item.screenshots);
+      } else if (typeof item.screenshots === 'object' && item.screenshots !== null) {
+        list = list.concat(Object.values(item.screenshots));
+      } else if (typeof item.screenshots === 'string' && item.screenshots.length > 5) {
+        list = list.concat(item.screenshots.includes(',') && !item.screenshots.startsWith('data:image') ? item.screenshots.split(',').map(s => s.trim()) : [item.screenshots.trim()]);
+      }
+
+      // ৩. সিঙ্গেল ইমেজ ফিল্ড রিড করা
+      if (item.image && typeof item.image === 'string' && item.image.length > 5) {
+        list.push(item.image.trim());
+      }
+      if (item.taskImage && typeof item.taskImage === 'string' && item.taskImage.length > 5) {
+        list.push(item.taskImage.trim());
+      }
+      if (item.screenshot && typeof item.screenshot === 'string' && item.screenshot.length > 5) {
+        list.push(item.screenshot.trim());
+      }
+
+      return [...new Set(list)].filter(url => url && url.length > 5);
+    }
+
+    function viewFullImage(src) {
+      if (!src) return;
+      const lightbox = document.getElementById('imageLightbox');
+      const img = document.getElementById('lightboxImg');
+      img.src = src;
+      lightbox.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      document.getElementById('imageLightbox').style.display = 'none';
+      document.getElementById('lightboxImg').src = '';
+    }
+
+    function loadWorkTasks() {
+      const container = document.getElementById('workTasksList');
+      if (!container) return;
+
+      database.ref('tasks').on('value', (snapshot) => {
+        const tasks = snapshot.val();
+        window.allLoadedTasks = tasks || {};
+
+        if (!tasks) {
+          showEmptyWorkUI();
+          return;
+        }
+
+        container.innerHTML = '';
+        let count = 0;
+
+        for (let key in tasks) {
+          const item = tasks[key];
+          if (!item) continue;
+          count++;
+
+          const title = item.title || item.name || 'নতুন কাজ';
+          const subtitle = item.subtitle || item.shortTitle || item.shortDesc || item.tag || '';
+          const link = item.link || item.url || '#';
+          const reward = item.reward || item.amount || 0;
+          const desc = item.desc || item.description || item.details || 'অ্যাডমিনের দেওয়া কাজের নিয়ম দেখে সঠিক কাজটি খুঁজুন ও সম্পন্ন করুন।';
+          const rules = item.rules || item.terms || item.conditions || item.instruction || '';
+
+          const reqScreenshots = parseInt(item.requiredScreenshots || item.screenshotCount || item.proofCount || 1) || 1;
+
+          // অ্যাডমিনের আপলোড করা ১ থেকে ৫টি ছবি বের করা
+          const adminScreenshots = extractAdminScreenshots(item);
+          let adminScreenshotsHTML = '';
+          
+          if (adminScreenshots.length > 0) {
+            adminScreenshotsHTML = `
+              <div class="admin-guide-box">
+                <div class="admin-guide-title">
+                  <span>📸 অ্যাডমিনের কাজের নির্দেশিকা ছবি (${adminScreenshots.length}টি)</span>
+                  <span style="font-size:11px; font-weight:normal; color:#2563eb;">(বড় করে দেখতে ক্লিক করুন)</span>
+                </div>
+                <div class="admin-guide-grid">
+                  ${adminScreenshots.map((src, idx) => `
+                    <div class="admin-guide-card" onclick="viewFullImage('${src.replace(/'/g, "\\'")}')" title="ছবি #${idx+1} বড় করে দেখুন">
+                      <img src="${src}" class="admin-guide-img" alt="Admin Guide ${idx+1}" />
+                      <span class="admin-guide-overlay-tag">🔍 #${idx+1}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          const reqBadge = reqScreenshots > 1 
+            ? `<span style="font-size:11px; background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:6px; font-weight:600; display:inline-block; margin-top:4px;">📸 ${reqScreenshots}টি স্ক্রিনশট আবশ্যক</span>` 
+            : '';
+
+          const subtitleHTML = subtitle ? `<div class="task-subtitle-tag">🏷️ <strong>সংক্ষিপ্ত শিরোনাম:</strong> ${subtitle}</div>` : '';
+          
+          const rulesHTML = rules ? `
+            <div class="task-specific-rules">
+              <strong>⚠️ কাজের বিশেষ নিয়ম ও শর্ত:</strong><br/>
+              ${rules}
+            </div>
+          ` : '';
+
+          const card = document.createElement('div');
+          card.className = 'task-card';
+          card.innerHTML = `
+            <div class="task-header">
+              <div>
+                <h4>${title}</h4>
+                ${subtitleHTML}
+                ${reqBadge}
+              </div>
+              <div class="task-reward">+ ৳${reward} আয়</div>
+            </div>
+
+            <!-- অ্যাডমিনের ছবি সবার উপরেই স্পষ্ট শো করবে -->
+            ${adminScreenshotsHTML}
+            
+            <div class="task-desc-box">
+              <div class="task-block-title">📝 কাজের বিবরণ ও নির্দেশিকা:</div>
+              <div class="task-details-text">${desc}</div>
+              ${rulesHTML}
+            </div>
+
+            <div class="task-actions">
+              <a href="${link}" target="_blank" class="btn-task-open">🌐 কাজের লিংক খুলুন</a>
+              <button class="btn-task-submit" onclick="openTaskSubmissionModal('${key}')">📤 প্রুফ জমা দিন</button>
+            </div>
+          `;
+          container.appendChild(card);
+        }
+
+        if (count === 0) showEmptyWorkUI();
+      });
+    }
+
+    function showEmptyWorkUI() {
+      const container = document.getElementById('workTasksList');
+      if (!container) return;
+      container.innerHTML = `
+        <div class="empty-work-card">
+          <div class="empty-work-icon">⏳</div>
+          <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">বর্তমানে কোনো কাজ নেই</h3>
+          <p style="font-size: 13px; color: #718096; line-height: 1.5;">অ্যাডমিন থেকে নতুন কোনো কাজ দেওয়া হলে এখানে দেখা যাবে।</p>
+        </div>
+      `;
+    }
+
+    function openTaskSubmissionModal(taskId) {
+      if (!state.isActive) {
+        showActivationPrompt();
+        return;
+      }
+
+      const item = (window.allLoadedTasks && window.allLoadedTasks[taskId]) ? window.allLoadedTasks[taskId] : null;
+      if (!item) return showToast('টাস্ক লোড করতে সমস্যা হয়েছে');
+
+      const adminScreenshots = extractAdminScreenshots(item);
+      const reqScreenshots = parseInt(item.requiredScreenshots || item.screenshotCount || item.proofCount || 1) || 1;
+
+      currentSelectedTask = {
+        id: taskId,
+        title: item.title || item.name || 'কাজ',
+        subtitle: item.subtitle || item.shortTitle || '',
+        desc: item.desc || item.description || '',
+        rules: item.rules || item.terms || '',
+        link: item.link || item.url || '#',
+        reward: item.reward || item.amount || 0,
+        adminScreenshots: adminScreenshots,
+        requiredScreenshots: reqScreenshots
+      };
+
+      document.getElementById('submitModalTitle').innerText = currentSelectedTask.title;
+      
+      const subTitleElem = document.getElementById('submitModalSubtitle');
+      if (currentSelectedTask.subtitle) {
+        subTitleElem.innerText = "🏷️ " + currentSelectedTask.subtitle;
+        subTitleElem.style.display = 'block';
+      } else {
+        subTitleElem.style.display = 'none';
+      }
+
+      document.getElementById('submitModalDesc').innerText = currentSelectedTask.desc;
+
+      const rulesBox = document.getElementById('submitModalRulesBox');
+      if (currentSelectedTask.rules) {
+        rulesBox.innerHTML = `<strong>⚠️ কাজের শর্তসমূহ:</strong><br/>${currentSelectedTask.rules}`;
+        rulesBox.style.display = 'block';
+      } else {
+        rulesBox.style.display = 'none';
+      }
+
+      document.getElementById('submitModalReward').innerText = `পুরস্কার: ৳ ${currentSelectedTask.reward} (${reqScreenshots}টি স্ক্রিনশট আবশ্যক)`;
+      
+      // সাবমিট মডালে অ্যাডমিনের ছবি
+      const modalScreenshotsArea = document.getElementById('submitModalScreenshotsArea');
+      const modalScreenshotsGrid = document.getElementById('submitModalScreenshotsGrid');
+      
+      if (adminScreenshots && adminScreenshots.length > 0) {
+        modalScreenshotsArea.style.display = 'block';
+        modalScreenshotsGrid.innerHTML = adminScreenshots.map((src, idx) => `
+          <div class="admin-guide-card" onclick="viewFullImage('${src.replace(/'/g, "\\'")}')" title="বড় করে দেখুন">
+            <img src="${src}" class="admin-guide-img" alt="Task Preview ${idx+1}" />
+            <span class="admin-guide-overlay-tag">🔍 #${idx+1}</span>
+          </div>
+        `).join('');
+      } else {
+        modalScreenshotsArea.style.display = 'none';
+        modalScreenshotsGrid.innerHTML = '';
+      }
+
+      const linkElem = document.getElementById('submitModalLink');
+      if (currentSelectedTask.link && currentSelectedTask.link !== '#') {
+        linkElem.href = currentSelectedTask.link;
+        linkElem.style.display = 'block';
+      } else {
+        linkElem.style.display = 'none';
+      }
+
+      // ইনপুট ফাইল বক্স রেন্ডার
+      const proofContainer = document.getElementById('userProofScreenshotsContainer');
+      proofContainer.innerHTML = '';
+
+      for (let i = 1; i <= reqScreenshots; i++) {
+        const group = document.createElement('div');
+        group.className = 'form-group';
+        group.innerHTML = `
+          <label style="font-weight:600; color:#2d3748;">📷 আপনার কাজের স্ক্রিনশট ${reqScreenshots > 1 ? `#${i} (${reqScreenshots}টির মধ্যে)` : ''}:</label>
+          <input type="file" class="task-proof-file-input" data-index="${i}" accept="image/*" />
+        `;
+        proofContainer.appendChild(group);
+      }
+
+      document.getElementById('taskProofNote').value = '';
+      document.getElementById('taskSubmitModal').style.display = 'flex';
+    }
+
+    function closeTaskModal() {
+      document.getElementById('taskSubmitModal').style.display = 'none';
+      currentSelectedTask = null;
+    }
+
+    function submitTaskProof() {
+      if (!currentUser || !currentSelectedTask) return;
+
+      const fileInputs = document.querySelectorAll('.task-proof-file-input');
+      const filesToRead = [];
+
+      for (let i = 0; i < fileInputs.length; i++) {
+        const input = fileInputs[i];
+        if (!input.files || input.files.length === 0) {
+          showToast(`দয়া করে স্ক্রিনশট #${i + 1} সিলেক্ট করুন!`);
+          return;
+        }
+        filesToRead.push(input.files[0]);
+      }
+
+      const note = document.getElementById('taskProofNote').value.trim();
+      showToast('স্ক্রিনশট আপলোড হচ্ছে...');
+
+      const compressAndConvert = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+              const canvas = document.createElement('canvas');
+              let width = img.width;
+              let height = img.height;
+              const maxW = 750;
+
+              if (width > maxW) {
+                height = Math.round((height * maxW) / width);
+                width = maxW;
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+              resolve(canvas.toDataURL('image/jpeg', 0.72));
+            };
+            img.src = event.target.result;
+          };
+          reader.onerror = (err) => reject(err);
+          reader.readAsDataURL(file);
+        });
+      };
+
+      Promise.all(filesToRead.map(compressAndConvert))
+        .then((base64Images) => {
+          return database.ref('task_submissions').push({
+            taskId: currentSelectedTask.id,
+            taskTitle: currentSelectedTask.title,
+            taskSubtitle: currentSelectedTask.subtitle || '',
+            taskReward: currentSelectedTask.reward,
+            userUid: currentUser.uid,
+            userName: state.name,
+            userPhone: state.phone,
+            screenshot: base64Images[0] || '',
+            screenshots: base64Images,
+            screenshotCount: base64Images.length,
+            note: note || 'কোনো নোট নেই',
+            status: 'pending',
+            submittedAt: firebase.database.ServerValue.TIMESTAMP
+          });
+        })
+        .then(() => {
+          closeTaskModal();
+          showToast('সবগুলো স্ক্রিনশট সফলভাবে জমা হয়েছে!');
+        })
+        .catch((error) => {
+          console.error(error);
+          showToast('স্ক্রিনশট আপলোড করতে ব্যর্থ হয়েছে!');
+        });
+    }
+
+    // ========================================================
+    // 5. UI SYNC & REFERRAL LINK
+    // ========================================================
+    function getReferralLink() {
+      const baseUrl = window.location.origin + window.location.pathname;
+      return `${baseUrl}?ref=${state.referralCode}`;
+    }
+
+    function initReferralLink() {
+      const linkInput = document.getElementById('refLinkTeam');
+      if (linkInput) {
+        linkInput.value = getReferralLink();
+      }
+    }
+
+    function copyReferralLink() {
+      if (!state.isActive) {
+        showActivationPrompt();
+        return;
+      }
+      copyText(getReferralLink(), 'রেফারেল লিংক কপি হয়েছে!');
+    }
+
+    function syncUserDataToUI() {
+      const firstLetter = state.name ? state.name.charAt(0) : "U";
+      
+      document.getElementById('sideAvatar').innerText = firstLetter;
+      document.getElementById('sideUserName').innerText = state.name;
+      document.getElementById('sideUserId').innerText = "ID: #" + state.uid.substring(0, 6).toUpperCase();
+      document.getElementById('sideDetailName').innerText = state.name;
+      document.getElementById('sideDetailPhone').innerText = state.phone;
+      
+      document.getElementById('profileAvatarLarge').innerText = firstLetter;
+      document.getElementById('profileCardName').innerText = state.name;
+      document.getElementById('profileCardUid').innerText = "UID: #" + state.uid.substring(0, 6).toUpperCase();
+      document.getElementById('profileDetailName').innerText = state.name;
+      document.getElementById('profileDetailUid').innerText = "#" + state.uid.substring(0, 6).toUpperCase();
+      document.getElementById('profileDetailPhone').innerText = state.phone;
+
+      initReferralLink();
+
+      if (state.isActive) {
+        document.querySelectorAll('.sideMenuAccountStatus').forEach(el => {
+          el.innerText = 'সক্রিয় (Active) ✓';
+          el.style.color = '#22c55e';
+        });
+
+        const profStatus = document.getElementById('profileAccountStatus');
+        if (profStatus) {
+          profStatus.innerText = 'সক্রিয় (Active) ✓';
+          profStatus.style.color = '#22c55e';
+        }
+
+        const noticeBar = document.getElementById('homeNoticeBar');
+        noticeBar.classList.add('activated');
+        document.getElementById('noticeBadge').innerText = 'সক্রিয়';
+        document.getElementById('noticeText').innerText = 'আপনার অ্যাকাউন্টটি পুরোপুরি সক্রিয়!';
+        document.getElementById('noticeBtn').style.display = 'none';
+      }
+    }
+
+    function updateUI() {
+      document.getElementById('mainBalance').innerText = state.balance.toLocaleString();
+      document.getElementById('workIncome').innerText = '৳ ' + state.workIncome.toLocaleString();
+      document.getElementById('refIncome').innerText = '৳ ' + state.refIncome.toLocaleString();
+      document.getElementById('totalIncome').innerText = '৳ ' + state.totalIncome.toLocaleString();
+    }
+
+    // ========================================================
+    // 6. DEPOSIT, WITHDRAW & HELPERS
+    // ========================================================
+    function openSideMenu() {
+      document.getElementById('sideMenuOverlay').classList.add('open');
+      document.getElementById('sideMenu').classList.add('open');
+    }
+
+    function closeSideMenu() {
+      document.getElementById('sideMenuOverlay').classList.remove('open');
+      document.getElementById('sideMenu').classList.remove('open');
+    }
+
+    function openModal() {
+      document.getElementById('activationModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('activationModal').style.display = 'none';
+    }
+
+    function showActivationPrompt() {
+      showToast('দয়া করে প্রথমে অ্যাকাউন্ট অ্যাক্টিভ করুন!');
+      openModal();
+    }
+
+    function goToDeposit(amount = 150) {
+      closeModal();
+      showSection('wallet');
+      const walletNavItem = document.getElementById('nav-wallet');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if(walletNavItem) walletNavItem.classList.add('active');
+      
+      switchWalletTab('deposit');
+      setAmount('deposit', amount);
+    }
+
+    function navClick(id, element) {
+      if (!state.isActive && (id === 'work' || id === 'team')) {
+        showActivationPrompt();
+        return;
+      }
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if(element) element.classList.add('active');
+      showSection(id);
+    }
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      const activeSection = document.getElementById(id);
+      if (activeSection) activeSection.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function switchWalletTab(type) {
+      if (type === 'withdraw' && !state.isActive) {
+        showActivationPrompt();
+        return;
+      }
+      const tabDep = document.getElementById('tabDeposit');
+      const tabWith = document.getElementById('tabWithdraw');
+
+      if (type === 'deposit') {
+        tabDep.classList.add('active');
+        tabWith.classList.remove('active');
+        document.getElementById('depositForm').style.display = 'block';
+        document.getElementById('withdrawForm').style.display = 'none';
+      } else {
+        tabWith.classList.add('active');
+        tabDep.classList.remove('active');
+        document.getElementById('depositForm').style.display = 'none';
+        document.getElementById('withdrawForm').style.display = 'block';
+      }
+    }
+
+    function toggleHistory(type) {
+      const btnDep = document.getElementById('btnDepositHist');
+      const btnWith = document.getElementById('btnWithdrawHist');
+      const depList = document.getElementById('depositHistoryList');
+      const withList = document.getElementById('withdrawHistoryList');
+
+      if (type === 'deposit') {
+        btnDep.classList.add('active');
+        btnWith.classList.remove('active');
+        depList.style.display = 'block';
+        withList.style.display = 'none';
+      } else {
+        btnWith.classList.add('active');
+        btnDep.classList.remove('active');
+        depList.style.display = 'none';
+        withList.style.display = 'block';
+      }
+    }
+
+    function setAmount(type, amount) {
+      if (type === 'deposit') {
+        document.getElementById('depositAmount').value = amount;
+      } else {
+        document.getElementById('withdrawAmount').value = amount;
+      }
+    }
+
+    function doDeposit() {
+      const amount = parseInt(document.getElementById('depositAmount').value);
+      const senderNum = document.getElementById('depositSenderNum').value;
+      const screenshotInput = document.getElementById('depositScreenshot');
+      const method = document.getElementById('depositMethod').value;
+
+      if (!amount || amount <= 0) return showToast('সঠিক পরিমাণ লিখুন');
+      if (!senderNum) return showToast('প্রেরক নম্বর দিন');
+      if (!screenshotInput.files || screenshotInput.files.length === 0) return showToast('পেমেন্টের স্ক্রিনশট সিলেক্ট করুন');
+
+      showToast('ডিপোজিট রিকোয়েস্ট পাঠানো হচ্ছে...');
+      const file = screenshotInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const base64Screenshot = e.target.result;
+
+        if (currentUser) {
+          database.ref('deposits/' + currentUser.uid).push({
+            method: method,
+            amount: amount,
+            senderNumber: senderNum,
+            screenshot: base64Screenshot,
+            status: 'pending',
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+          }).then(() => {
+            closeModal();
+            showToast(`৳${amount} ডিপোজিট রিকোয়েস্ট সফলভাবে জমা হয়েছে`);
+            document.getElementById('depositSenderNum').value = '';
+            screenshotInput.value = '';
+          }).catch(err => {
+            showToast('ডিপোজিট ব্যর্থ: ' + err.message);
+          });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function doWithdraw() {
+      if (!state.isActive) return showActivationPrompt();
+
+      const amount = parseInt(document.getElementById('withdrawAmount').value);
+      const account = document.getElementById('accountNumber').value;
+      const method = document.getElementById('withdrawMethod').value;
+
+      if (!amount || amount <= 0) return showToast('সঠিক পরিমাণ লিখুন');
+      if (!account) return showToast('অ্যাকাউন্ট নম্বর দিন');
+      if (state.balance < amount) return showToast('অপর্যাপ্ত ব্যালেন্স!');
+
+      if (currentUser) {
+        database.ref('users/' + currentUser.uid).update({
+          balance: state.balance - amount
+        });
+
+        database.ref('withdrawals/' + currentUser.uid).push({
+          method: method,
+          amount: amount,
+          accountNumber: account,
+          status: 'pending',
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+
+      showToast(`৳${amount} উইথড্র রিকোয়েস্ট জমা হয়েছে`);
+      document.getElementById('withdrawAmount').value = '';
+      document.getElementById('accountNumber').value = '';
+    }
+
+    function copyText(text, msg) {
+      navigator.clipboard.writeText(text).then(() => showToast(msg)).catch(() => showToast(msg));
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+  </script>
+</body>
+</html>
