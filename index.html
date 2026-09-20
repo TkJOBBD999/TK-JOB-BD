@@ -1464,7 +1464,7 @@
       <div class="content-box">
         <div class="refer-box-compact">
           <span class="refer-bonus-badge">🎁 প্রতি সফল রেফারে ১০০ টাকা বোনাস!</span>
-          <p style="font-size: 12px; opacity: 0.95; margin-bottom: 12px;">আপনার ৬ সংখ্যার রেফার কোড যুক্ত লিংকের মাধ্যমে যে কেউ যুক্ত হলেই পাবেন ১০০৳ কমিশন।</p>
+          <p style="font-size: 12px; opacity: 0.95; margin-bottom: 12px;">আপনার রেফার করা মেম্বার অ্যাকাউন্ট অ্যাক্টিভ (১৫০৳ ডিপোজিট) করলেই পাবেন ১০০৳ ইনস্ট্যান্ট বোনাস!</p>
           
           <div class="refer-input-group">
             <input type="text" id="refLinkTeam" value="" readonly />
@@ -1518,7 +1518,7 @@
             <h4>📜 কাজের নিয়ম ও নির্দেশিকা:</h4>
             <ul>
               <li>অ্যাডমিনের দেওয়া কাজের ছবি ও নিয়ম দেখে সঠিক কাজটি সম্পূর্ণ করুন।</li>
-              <li>স্ক্রিনশট জমা দিলে অ্যাডমিন যাচাই করবেন এবং <strong>Approve</strong> হলে ব্যালেন্সে টাকা যুক্ত হবে এবং কাজ সম্পন্ন হিসেবে তালিকাবদ্ধ হবে।</li>
+              <li>স্ক্রিনশট জমা দিলে অ্যাডমিন যাচাই করবেন এবং <strong>Approve</strong> হলে ব্যালেন্সে টাকা যুক্ত হবে।</li>
               <li>জমা দেওয়া কাজের স্ট্যাটাস দেখতে <strong>"জমা দেওয়া কাজ ও স্ট্যাটাস"</strong> ট্যাবে যান।</li>
             </ul>
           </div>
@@ -1795,7 +1795,7 @@
     });
 
     // ========================================================
-    // 3. AUTHENTICATION LOGIC
+    // 3. AUTHENTICATION & REFERRAL LOGIC
     // ========================================================
     function switchAuthTab(type) {
       const tabLog = document.getElementById('tabLogin');
@@ -1854,31 +1854,23 @@
             workIncome: 0,
             refIncome: 0,
             totalIncome: 0,
+            referralBonusGiven: false,
             createdAt: firebase.database.ServerValue.TIMESTAMP
           };
 
           return database.ref('users/' + userUid).set(userData).then(() => {
+            // রেজিস্ট্রেশনের পর রেফারারের টিমে "Pending" হিসেবে সদস্য যোগ হবে (বোনাস এখনো যোগ হবে না)
             if (refCode && refCode !== '') {
               database.ref('users').orderByChild('referralCode').equalTo(refCode).once('value', (snap) => {
                 if (snap.exists()) {
                   snap.forEach((referrerSnap) => {
                     const referrerUid = referrerSnap.key;
-                    const rData = referrerSnap.val();
-                    const updatedBalance = (rData.balance || 0) + 100;
-                    const updatedRefIncome = (rData.refIncome || 0) + 100;
-                    const updatedTotalIncome = (rData.totalIncome || 0) + 100;
-
-                    database.ref('users/' + referrerUid).update({
-                      balance: updatedBalance,
-                      refIncome: updatedRefIncome,
-                      totalIncome: updatedTotalIncome
-                    });
-
-                    database.ref('referrals/' + referrerUid).push({
+                    database.ref('referrals/' + referrerUid + '/' + userUid).set({
                       memberUid: userUid,
                       memberName: name,
                       memberPhone: phone,
-                      bonus: 100,
+                      bonus: 0,
+                      status: 'pending',
                       timestamp: firebase.database.ServerValue.TIMESTAMP
                     });
                   });
@@ -1898,6 +1890,41 @@
             showToast(error.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
           }
         });
+    }
+
+    // অ্যাক্টিভেশন হলে রেফারেল বোনাস যোগ করার ফাংশন
+    function checkAndCreditReferralBonus(userData, userUid) {
+      if (userData.isActive === true && userData.referredBy && userData.referredBy !== 'NONE' && userData.referralBonusGiven !== true) {
+        database.ref('users').orderByChild('referralCode').equalTo(userData.referredBy).once('value', (snap) => {
+          if (snap.exists()) {
+            snap.forEach((referrerSnap) => {
+              const referrerUid = referrerSnap.key;
+              
+              // রেফারারের ব্যালেন্সে ১০০৳ যোগ করা
+              database.ref('users/' + referrerUid).transaction((uData) => {
+                if (uData) {
+                  uData.balance = (uData.balance || 0) + 100;
+                  uData.refIncome = (uData.refIncome || 0) + 100;
+                  uData.totalIncome = (uData.totalIncome || 0) + 100;
+                }
+                return uData;
+              });
+
+              // টিমে স্ট্যাটাস 'Active' এবং বোনাস ১০০৳ আপডেট করা
+              database.ref('referrals/' + referrerUid + '/' + userUid).update({
+                bonus: 100,
+                status: 'active',
+                activatedAt: firebase.database.ServerValue.TIMESTAMP
+              });
+            });
+
+            // বর্তমান ইউজারে মার্ক করা যেন বারবার বোনাস না যায়
+            database.ref('users/' + userUid).update({
+              referralBonusGiven: true
+            });
+          }
+        });
+      }
     }
 
     function doFirebaseLogin() {
@@ -1946,6 +1973,9 @@
             state.refIncome = data.refIncome || 0;
             state.totalIncome = data.totalIncome || 0;
 
+            // অ্যাকাউন্ট অ্যাক্টিভ হলে রেফারারকে বোনাস দেওয়ার ট্রিকার
+            checkAndCreditReferralBonus(data, user.uid);
+
             syncUserDataToUI();
             updateUI();
           }
@@ -1979,7 +2009,14 @@
         for (let k in members) {
           count++;
           const m = members[k];
-          bonusTotal += (m.bonus || 100);
+          const isActivated = (m.status === 'active' || (m.bonus && m.bonus > 0));
+          const bonusAmt = isActivated ? (m.bonus || 100) : 0;
+          bonusTotal += bonusAmt;
+
+          const statusBadge = isActivated
+            ? `<span class="status-badge" style="background:#e6f9ed; color:#155724;">সফল রেফার (+৳${bonusAmt})</span>`
+            : `<span class="status-badge" style="background:#fef3c7; color:#92400e;">অ্যাক্টিভেশন বাকি</span>`;
+
           const item = document.createElement('div');
           item.className = 'history-item';
           item.innerHTML = `
@@ -1988,8 +2025,8 @@
               <div style="font-size:11px; color:#888;">${m.memberPhone}</div>
             </div>
             <div style="text-align:right;">
-              <div style="font-weight:700; font-size:13px; color:#22c55e;">+ ৳${m.bonus || 100}</div>
-              <span class="status-badge" style="background:#e6f9ed; color:#155724;">সফল রেফার</span>
+              <div style="font-weight:700; font-size:13px; color:${isActivated ? '#22c55e' : '#e67e22'};">${isActivated ? '+ ৳' + bonusAmt : '৳ 0'}</div>
+              ${statusBadge}
             </div>
           `;
           container.appendChild(item);
@@ -2027,14 +2064,12 @@
         const data = snap.val() || {};
         window.userTasksStatus = data;
 
-        // চেক করা: অ্যাডমিন কাজ Approve করেছে কিনা এবং ব্যালেন্সে অ্যাড হয়েছে কিনা
         for (let taskId in data) {
           const item = data[taskId];
           if (item && item.status === 'approved' && item.rewardCredited !== true) {
             const rewardAmt = parseInt(item.reward || 0);
             
             if (rewardAmt > 0) {
-              // অটোমেটিক ব্যালেন্সে টাকা যোগ করা
               database.ref('users/' + uid).transaction((uData) => {
                 if (uData) {
                   uData.balance = (uData.balance || 0) + rewardAmt;
@@ -2056,10 +2091,9 @@
 
         renderSubmittedTasksView(data);
         renderRecentWorkActivity(data);
-        loadWorkTasks(); // স্ট্যাটাস পরিবর্তন হলে কাজসমূহের তালিকা রিলোড করা
+        loadWorkTasks();
       });
 
-      // অ্যাডমিন সাইড সিঙ্ক
       database.ref('task_submissions').orderByChild('userUid').equalTo(uid).on('child_changed', (subSnap) => {
         const sub = subSnap.val();
         if (sub && sub.taskId && sub.status) {
@@ -2227,13 +2261,9 @@
           const item = tasks[key];
           if (!item) continue;
 
-          // কাজের স্ট্যাটাস চেক
           const userTask = (window.userTasksStatus && window.userTasksStatus[key]) ? window.userTasksStatus[key] : null;
           const taskStatus = userTask ? userTask.status : null; 
 
-          // ==========================================
-          // কাজ Approved হলে "কাজসমূহ" লিস্ট থেকে লুকিয়ে রাখা হবে
-          // ==========================================
           if (taskStatus === 'approved') {
             continue; 
           }
