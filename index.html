@@ -390,6 +390,15 @@
       gap: 12px;
     }
 
+    .task-card.task-approved {
+      border-left-color: #22c55e;
+      background: #fcfdfd;
+    }
+
+    .task-card.task-pending {
+      border-left-color: #eab308;
+    }
+
     .task-header {
       display: flex;
       justify-content: space-between;
@@ -425,7 +434,33 @@
       border: 1px solid #bbf7d0;
     }
 
-    /* ============ ADMIN REFERENCE IMAGES DISPLAY (SPECIAL) ============ */
+    /* Task Submission Status Badge */
+    .task-status-banner {
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-banner-pending {
+      background: #fef9c3;
+      color: #854d0e;
+      border: 1px solid #fde047;
+    }
+    .status-banner-approved {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .status-banner-rejected {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+
+    /* Admin Reference Images Display */
     .admin-guide-box {
       background: #eff6ff;
       border: 1.5px solid #bfdbfe;
@@ -1081,7 +1116,7 @@
       margin-top: 15px;
     }
 
-    /* Image Lightbox (Full Screen Zoom View) */
+    /* Image Lightbox */
     #imageLightbox {
       position: fixed;
       top: 0;
@@ -1130,14 +1165,14 @@
 </head>
 <body>
 
-  <!-- ==================== IMAGE LIGHTBOX (ফুল স্ক্রিন ছবি ভিউ) ==================== -->
+  <!-- IMAGE LIGHTBOX -->
   <div id="imageLightbox" onclick="closeLightbox()">
     <button class="lightbox-close-btn" onclick="closeLightbox()">✕</button>
     <img id="lightboxImg" src="" alt="Screenshot Full View" onclick="event.stopPropagation()" />
     <p style="color:#ddd; font-size:12px; margin-top:10px;">স্ক্রিনের বাইরে ক্লিক করলে বন্ধ হবে</p>
   </div>
 
-  <!-- ==================== AUTH VIEW ==================== -->
+  <!-- AUTH VIEW -->
   <div id="authView" class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
@@ -1186,7 +1221,7 @@
     </div>
   </div>
 
-  <!-- ==================== MAIN APPLICATION VIEW ==================== -->
+  <!-- MAIN APPLICATION VIEW -->
   <div id="mainApp" style="display:none;">
 
     <!-- SIDE-DRAWER -->
@@ -1253,10 +1288,8 @@
           <div style="font-weight:700; color:#0f172a; margin-bottom:4px;">📋 অ্যাডমিনের কাজের পূর্ণ বিবরণ:</div>
           <div id="submitModalDesc" class="task-details-text">বিস্তারিত লোড হচ্ছে...</div>
           
-          <!-- Task specific rules inside modal -->
           <div id="submitModalRulesBox" class="task-specific-rules" style="display:none;"></div>
 
-          <!-- Modal Admin Screenshots Preview -->
           <div id="submitModalScreenshotsArea" style="margin-top:10px; display:none;">
             <div style="font-size:11.5px; font-weight:700; color:#1e40af; margin-bottom:6px;">🖼️ অ্যাডমিনের কাজের ছবি (ক্লিক করে বড় দেখুন):</div>
             <div id="submitModalScreenshotsGrid" class="admin-guide-grid"></div>
@@ -1271,7 +1304,6 @@
           </a>
         </div>
 
-        <!-- Dynamic User Screenshot Inputs Container -->
         <div id="userProofScreenshotsContainer"></div>
 
         <div class="form-group">
@@ -1279,7 +1311,7 @@
           <input type="text" id="taskProofNote" placeholder="যেমন: কাজ সম্পন্ন করেছি" />
         </div>
 
-        <button class="btn btn-success btn-full" style="margin-top:6px;" onclick="submitTaskProof()">✅ স্ক্রিনশট জমা দিন</button>
+        <button class="btn btn-success btn-full" id="btnTaskFinalSubmit" style="margin-top:6px;" onclick="submitTaskProof()">✅ স্ক্রিনশট জমা দিন</button>
         <button class="modal-close-btn" onclick="closeTaskModal()">বাতিল করুন</button>
       </div>
     </div>
@@ -1387,14 +1419,13 @@
       </div>
 
       <div class="content-box">
-        
-        <!-- কাজের সাধারণ নিয়মাবলী ব্যানার -->
         <div class="work-rules-banner">
           <h4>📜 কাজের সাধারণ নিয়মাবলী ও নির্দেশিকা:</h4>
           <ul>
-            <li>অ্যাডমিনের দেওয়া কাজের ছবি/থাম্বনেইল ও বিবরণ দেখে সঠিক কাজটি খুঁজুন।</li>
-            <li>লিংকে গিয়ে কাজ সঠিকভাবে সম্পন্ন করে স্ক্রিনশট প্রুফ জমা দিন।</li>
-            <li>অ্যাডমিন স্ক্রিনশট ভেরিফাই করে আপনার মূল ব্যালেন্সে টাকা যুক্ত করবেন।</li>
+            <li>অ্যাডমিনের দেওয়া কাজের ছবি ও বিবরণ দেখে কাজটি নিখুঁতভাবে সম্পন্ন করুন।</li>
+            <li>স্ক্রিনশট জমা দিলে অ্যাডমিন ভেরিফাই করে অ্যাপ্রুভ করবেন।</li>
+            <li>অ্যাডমিন <strong>Approve</strong> করলেই স্বয়ংক্রিয়ভাবে ব্যালেন্সে টাকা যুক্ত হবে।</li>
+            <li>একবার কাজ অ্যাপ্রুভ হয়ে গেলে ওই কাজ আর দ্বিতীয়বার করা যাবে না।</li>
           </ul>
         </div>
 
@@ -1620,7 +1651,8 @@
     // ========================================================
     let currentUser = null;
     let currentSelectedTask = null;
-    window.allLoadedTasks = {}; // স্টোরে টাস্ক জমা রাখার অবজেক্ট
+    window.allLoadedTasks = {};
+    window.userTasksStatus = {}; // ইউজারের কাজসমূহের বর্তমান স্ট্যাটাস
 
     let state = {
       name: "ব্যবহারকারী",
@@ -1809,7 +1841,7 @@
         });
 
         loadReferralTeam(user.uid);
-        loadWorkTasks();
+        listenToUserTaskSubmissions(user.uid);
       } else {
         currentUser = null;
         document.getElementById('authView').style.display = 'flex';
@@ -1857,13 +1889,50 @@
     }
 
     // ========================================================
-    // 4. ADMIN IMAGES EXTRACTION & WORK TASKS
+    // 4. TASK SUBMISSIONS LISTENER & AUTO-BALANCE ADDITION
     // ========================================================
+    function listenToUserTaskSubmissions(uid) {
+      database.ref('user_tasks/' + uid).on('value', (snap) => {
+        const data = snap.val() || {};
+        window.userTasksStatus = data;
+
+        // চেক করা কোনো কাজ Approve হয়েছে কিনা এবং ব্যালেন্সে অ্যাড করা বাকি কিনা
+        for (let taskId in data) {
+          const item = data[taskId];
+          if (item && item.status === 'approved' && item.rewardCredited !== true) {
+            const rewardAmt = parseInt(item.reward || 0);
+            if (rewardAmt > 0) {
+              // ইউজারের মূল ব্যালেন্সে টাকা যুক্ত করা
+              database.ref('users/' + uid).once('value', (uSnap) => {
+                const uData = uSnap.val() || {};
+                const newBal = (uData.balance || 0) + rewardAmt;
+                const newWorkInc = (uData.workIncome || 0) + rewardAmt;
+                const newTotInc = (uData.totalIncome || 0) + rewardAmt;
+
+                database.ref('users/' + uid).update({
+                  balance: newBal,
+                  workIncome: newWorkInc,
+                  totalIncome: newTotInc
+                }).then(() => {
+                  database.ref('user_tasks/' + uid + '/' + taskId).update({
+                    rewardCredited: true
+                  });
+                  showToast(`🎉 অভিনন্দন! কাজের ৳${rewardAmt} ব্যালেন্সে যুক্ত হয়েছে!`);
+                });
+              });
+            }
+          }
+        }
+
+        // টাস্ক লিস্ট রেন্ডার
+        loadWorkTasks();
+      });
+    }
+
     function extractAdminScreenshots(item) {
       let list = [];
       if (!item) return list;
 
-      // ১. অ্যারে থেকে images রিড করা
       if (Array.isArray(item.images)) {
         list = list.concat(item.images);
       } else if (typeof item.images === 'object' && item.images !== null) {
@@ -1872,7 +1941,6 @@
         list = list.concat(item.images.includes(',') && !item.images.startsWith('data:image') ? item.images.split(',').map(s => s.trim()) : [item.images.trim()]);
       }
 
-      // ২. screenshots রিড করা
       if (Array.isArray(item.screenshots)) {
         list = list.concat(item.screenshots);
       } else if (typeof item.screenshots === 'object' && item.screenshots !== null) {
@@ -1881,7 +1949,6 @@
         list = list.concat(item.screenshots.includes(',') && !item.screenshots.startsWith('data:image') ? item.screenshots.split(',').map(s => s.trim()) : [item.screenshots.trim()]);
       }
 
-      // ৩. সিঙ্গেল ইমেজ ফিল্ড রিড করা
       if (item.image && typeof item.image === 'string' && item.image.length > 5) {
         list.push(item.image.trim());
       }
@@ -1937,11 +2004,60 @@
           const rules = item.rules || item.terms || item.conditions || item.instruction || '';
 
           const reqScreenshots = parseInt(item.requiredScreenshots || item.screenshotCount || item.proofCount || 1) || 1;
-
-          // অ্যাডমিনের আপলোড করা ১ থেকে ৫টি ছবি বের করা
           const adminScreenshots = extractAdminScreenshots(item);
-          let adminScreenshotsHTML = '';
+
+          // ইউজারের কাজের সাবমিশন স্ট্যাটাস চেক
+          const userTask = (window.userTasksStatus && window.userTasksStatus[key]) ? window.userTasksStatus[key] : null;
+          const taskStatus = userTask ? userTask.status : null; // 'pending', 'approved', 'rejected', or null
+
+          let statusCardClass = '';
+          let statusBannerHTML = '';
+          let submitButtonHTML = '';
+
+          if (taskStatus === 'approved') {
+            statusCardClass = 'task-approved';
+            statusBannerHTML = `
+              <div class="task-status-banner status-banner-approved">
+                <span>✅ এই কাজটি অনুমোদিত (Approved) হয়েছে। আপনার ব্যালেন্সে টাকা যুক্ত হয়েছে!</span>
+              </div>
+            `;
+            submitButtonHTML = `
+              <button class="btn-task-submit" style="background:#22c55e; opacity:0.9; cursor:not-allowed;" disabled>
+                ✅ কাজ সম্পন্ন হয়েছে
+              </button>
+            `;
+          } else if (taskStatus === 'pending') {
+            statusCardClass = 'task-pending';
+            statusBannerHTML = `
+              <div class="task-status-banner status-banner-pending">
+                <span>⏳ আপনার কাজটি বর্তমানে পেন্ডিং আছে (অ্যাডমিন যাচাই করছেন)।</span>
+              </div>
+            `;
+            submitButtonHTML = `
+              <button class="btn-task-submit" style="background:#eab308; opacity:0.9; cursor:not-allowed;" disabled>
+                ⏳ পেন্ডিং আছে (যাচাই চলছে)
+              </button>
+            `;
+          } else if (taskStatus === 'rejected') {
+            statusBannerHTML = `
+              <div class="task-status-banner status-banner-rejected">
+                <span>❌ পূর্বের প্রুফটি বাতিল হয়েছে। দয়া করে সঠিক প্রুফ পুনরায় জমা দিন।</span>
+              </div>
+            `;
+            submitButtonHTML = `
+              <button class="btn-task-submit" onclick="openTaskSubmissionModal('${key}')">
+                📤 পুনরায় প্রুফ জমা দিন
+              </button>
+            `;
+          } else {
+            submitButtonHTML = `
+              <button class="btn-task-submit" onclick="openTaskSubmissionModal('${key}')">
+                📤 প্রুফ জমা দিন
+              </button>
+            `;
+          }
           
+          let adminScreenshotsHTML = '';
           if (adminScreenshots.length > 0) {
             adminScreenshotsHTML = `
               <div class="admin-guide-box">
@@ -1975,7 +2091,7 @@
           ` : '';
 
           const card = document.createElement('div');
-          card.className = 'task-card';
+          card.className = `task-card ${statusCardClass}`;
           card.innerHTML = `
             <div class="task-header">
               <div>
@@ -1986,7 +2102,7 @@
               <div class="task-reward">+ ৳${reward} আয়</div>
             </div>
 
-            <!-- অ্যাডমিনের ছবি সবার উপরেই স্পষ্ট শো করবে -->
+            ${statusBannerHTML}
             ${adminScreenshotsHTML}
             
             <div class="task-desc-box">
@@ -1997,7 +2113,7 @@
 
             <div class="task-actions">
               <a href="${link}" target="_blank" class="btn-task-open">🌐 কাজের লিংক খুলুন</a>
-              <button class="btn-task-submit" onclick="openTaskSubmissionModal('${key}')">📤 প্রুফ জমা দিন</button>
+              ${submitButtonHTML}
             </div>
           `;
           container.appendChild(card);
@@ -2022,6 +2138,17 @@
     function openTaskSubmissionModal(taskId) {
       if (!state.isActive) {
         showActivationPrompt();
+        return;
+      }
+
+      // চেক করা কাজ ইতিমধ্যে করা বা পেন্ডিং আছে কিনা
+      const existingStatus = (window.userTasksStatus && window.userTasksStatus[taskId]) ? window.userTasksStatus[taskId].status : null;
+      if (existingStatus === 'approved') {
+        showToast('এই কাজটি ইতিমধ্যে সম্পন্ন ও অনুমোদিত হয়েছে!');
+        return;
+      }
+      if (existingStatus === 'pending') {
+        showToast('এই কাজের প্রুফ জমা দেওয়া আছে, অ্যাডমিন যাচাই করছেন!');
         return;
       }
 
@@ -2065,7 +2192,6 @@
 
       document.getElementById('submitModalReward').innerText = `পুরস্কার: ৳ ${currentSelectedTask.reward} (${reqScreenshots}টি স্ক্রিনশট আবশ্যক)`;
       
-      // সাবমিট মডালে অ্যাডমিনের ছবি
       const modalScreenshotsArea = document.getElementById('submitModalScreenshotsArea');
       const modalScreenshotsGrid = document.getElementById('submitModalScreenshotsGrid');
       
@@ -2090,7 +2216,6 @@
         linkElem.style.display = 'none';
       }
 
-      // ইনপুট ফাইল বক্স রেন্ডার
       const proofContainer = document.getElementById('userProofScreenshotsContainer');
       proofContainer.innerHTML = '';
 
@@ -2105,6 +2230,8 @@
       }
 
       document.getElementById('taskProofNote').value = '';
+      document.getElementById('btnTaskFinalSubmit').disabled = false;
+      document.getElementById('btnTaskFinalSubmit').innerText = '✅ স্ক্রিনশট জমা দিন';
       document.getElementById('taskSubmitModal').style.display = 'flex';
     }
 
@@ -2129,6 +2256,9 @@
       }
 
       const note = document.getElementById('taskProofNote').value.trim();
+      const submitBtn = document.getElementById('btnTaskFinalSubmit');
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'আপলোড হচ্ছে...';
       showToast('স্ক্রিনশট আপলোড হচ্ছে...');
 
       const compressAndConvert = (file) => {
@@ -2162,7 +2292,9 @@
 
       Promise.all(filesToRead.map(compressAndConvert))
         .then((base64Images) => {
-          return database.ref('task_submissions').push({
+          const submissionKey = database.ref('task_submissions').push().key;
+          const submissionData = {
+            submissionId: submissionKey,
             taskId: currentSelectedTask.id,
             taskTitle: currentSelectedTask.title,
             taskSubtitle: currentSelectedTask.subtitle || '',
@@ -2176,15 +2308,33 @@
             note: note || 'কোনো নোট নেই',
             status: 'pending',
             submittedAt: firebase.database.ServerValue.TIMESTAMP
-          });
+          };
+
+          const updates = {};
+          // ১. অ্যাডমিনদের সার্বিক লিস্টের জন্য
+          updates['task_submissions/' + submissionKey] = submissionData;
+          // ২. ইউজারের নিজস্ব কাজ হিস্ট্রি ও স্ট্যাটাস ট্র্যাকিংয়ের জন্য
+          updates['user_tasks/' + currentUser.uid + '/' + currentSelectedTask.id] = {
+            status: 'pending',
+            taskId: currentSelectedTask.id,
+            title: currentSelectedTask.title,
+            reward: currentSelectedTask.reward,
+            submissionId: submissionKey,
+            rewardCredited: false,
+            submittedAt: firebase.database.ServerValue.TIMESTAMP
+          };
+
+          return database.ref().update(updates);
         })
         .then(() => {
           closeTaskModal();
-          showToast('সবগুলো স্ক্রিনশট সফলভাবে জমা হয়েছে!');
+          showToast('কাজের প্রমাণ জমা হয়েছে! অ্যাডমিন যাচাই করার পর টাকা ব্যালেন্সে যুক্ত হবে।');
         })
         .catch((error) => {
           console.error(error);
-          showToast('স্ক্রিনশট আপলোড করতে ব্যর্থ হয়েছে!');
+          submitBtn.disabled = false;
+          submitBtn.innerText = '✅ স্ক্রিনশট জমা দিন';
+          showToast('স্ক্রিনশট আপলোড করতে সমস্যা হয়েছে!');
         });
     }
 
