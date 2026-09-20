@@ -350,6 +350,49 @@
     }
 
     /* ================= WORK SECTION STYLES ================= */
+    .work-tabs {
+      display: flex;
+      background: #e2e8f0;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .work-tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .work-tab-btn.active {
+      background: linear-gradient(135deg, #e52d27 0%, #b31217 100%);
+      color: white;
+      box-shadow: 0 3px 10px rgba(229, 45, 39, 0.25);
+    }
+
+    .badge-counter {
+      background: rgba(255, 255, 255, 0.25);
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+
+    .work-tab-btn:not(.active) .badge-counter {
+      background: #cbd5e1;
+      color: #334155;
+    }
+
     .work-rules-banner {
       background: #fff8e6;
       border: 1px solid #ffe58f;
@@ -377,7 +420,7 @@
       line-height: 1.6;
     }
 
-    /* Tasks UI */
+    /* Tasks Cards */
     .task-card {
       background: white;
       border-radius: 16px;
@@ -588,7 +631,7 @@
 
     .btn-task-submit {
       flex: 1;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #e52d27 0%, #b31217 100%);
       color: white;
       border: none;
       padding: 10px 12px;
@@ -600,7 +643,6 @@
       align-items: center;
       justify-content: center;
       gap: 5px;
-      transition: all 0.2s;
     }
 
     .empty-work-card {
@@ -617,6 +659,41 @@
       font-size: 46px;
       margin-bottom: 12px;
       display: inline-block;
+    }
+
+    /* Submission History Cards */
+    .subm-history-card {
+      background: white;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .subm-history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .subm-history-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .subm-history-reward {
+      font-size: 13px;
+      font-weight: 700;
+      color: #16a34a;
+    }
+
+    .subm-history-time {
+      font-size: 11px;
+      color: #64748b;
     }
 
     /* Buttons */
@@ -827,16 +904,17 @@
 
     .status-badge {
       font-size: 10px;
-      padding: 2px 7px;
+      padding: 3px 8px;
       border-radius: 12px;
-      font-weight: 600;
+      font-weight: 700;
+      display: inline-block;
     }
 
     .no-history-text {
       text-align: center;
       color: #888;
       font-size: 13px;
-      padding: 12px 0;
+      padding: 16px 0;
     }
 
     /* Profile Header Card */
@@ -1412,7 +1490,7 @@
       </div>
     </div>
 
-    <!-- 3. WORK SECTION -->
+    <!-- 3. WORK SECTION (WITH 2 DISTINCT TABS) -->
     <div id="work" class="section">
       <div class="header work-header">
         <div class="header-left">
@@ -1422,27 +1500,57 @@
       </div>
 
       <div class="content-box">
-        <div class="work-rules-banner">
-          <h4>📜 কাজের সাধারণ নিয়মাবলী ও নির্দেশিকা:</h4>
-          <ul>
-            <li>অ্যাডমিনের দেওয়া কাজের ছবি ও নিয়ম দেখে সঠিক কাজটি সম্পূর্ণ করুন।</li>
-            <li>স্ক্রিনশট জমা দিলে অ্যাডমিন যাচাই করার আগ পর্যন্ত তা <strong>পেন্ডিং (Pending)</strong> থাকবে।</li>
-            <li>অ্যাডমিন <strong>Approve</strong> করলেই স্বয়ংক্রিয়ভাবে মূল ব্যালেন্সে টাকা যুক্ত হয়ে যাবে।</li>
-            <li>একবার কোনো কাজ অনুমোদিত হয়ে গেলে সেটি আর দ্বিতীয়বার করা যাবে না।</li>
-          </ul>
-        </div>
-
-        <div class="section-title" style="margin-top: 5px;">
-          <span>অ্যাডমিন থেকে নির্ধারিত কাজসমূহ</span>
-        </div>
         
-        <div id="workTasksList">
-          <div class="empty-work-card" id="emptyWorkPlaceholder">
-            <div class="empty-work-icon">⏳</div>
-            <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">কাজ লোড হচ্ছে...</h3>
-            <p style="font-size: 13px; color: #718096; line-height: 1.5;">দয়া করে কিছুক্ষণ অপেক্ষা করুন।</p>
+        <!-- Work 2 Sub-Tabs -->
+        <div class="work-tabs">
+          <div class="work-tab-btn active" id="tabWorkAvailable" onclick="switchWorkSubTab('available')">
+            <span>📋 কাজসমূহ (Tasks)</span>
+          </div>
+          <div class="work-tab-btn" id="tabWorkSubmitted" onclick="switchWorkSubTab('submitted')">
+            <span>⏳ জমা দেওয়া কাজ ও স্ট্যাটাস</span>
+            <span class="badge-counter" id="badgeSubmittedCount">0</span>
           </div>
         </div>
+
+        <!-- 3.1 AVAILABLE TASKS VIEW -->
+        <div id="workAvailableView">
+          <div class="work-rules-banner">
+            <h4>📜 কাজের নিয়ম ও নির্দেশিকা:</h4>
+            <ul>
+              <li>অ্যাডমিনের দেওয়া কাজের ছবি ও নিয়ম দেখে সঠিক কাজটি সম্পূর্ণ করুন।</li>
+              <li>স্ক্রিনশট জমা দিলে অ্যাডমিন যাচাই করবেন এবং <strong>Approve</strong> হলে ব্যালেন্সে টাকা যুক্ত হবে এবং কাজ সম্পন্ন হিসেবে তালিকাবদ্ধ হবে।</li>
+              <li>জমা দেওয়া কাজের স্ট্যাটাস দেখতে <strong>"জমা দেওয়া কাজ ও স্ট্যাটাস"</strong> ট্যাবে যান।</li>
+            </ul>
+          </div>
+
+          <div class="section-title" style="margin-top: 5px;">
+            <span>উপলব্ধ কাজের তালিকা</span>
+          </div>
+          
+          <div id="workTasksList">
+            <div class="empty-work-card" id="emptyWorkPlaceholder">
+              <div class="empty-work-icon">⏳</div>
+              <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">কাজ লোড হচ্ছে...</h3>
+              <p style="font-size: 13px; color: #718096; line-height: 1.5;">দয়া করে কিছুক্ষণ অপেক্ষা করুন।</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.2 SUBMITTED TASKS & STATUS VIEW -->
+        <div id="workSubmittedView" style="display: none;">
+          <div class="section-title" style="margin-top: 5px;">
+            <span>আমার জমা দেওয়া কাজসমূহের বর্তমান স্ট্যাটাস</span>
+          </div>
+          
+          <div id="submittedTasksList">
+            <div class="empty-work-card">
+              <div class="empty-work-icon">📭</div>
+              <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">এখনো কোনো কাজ জমা দেননি</h3>
+              <p style="font-size: 13px; color: #718096; line-height: 1.5;">"কাজসমূহ" ট্যাব থেকে কাজ সম্পূর্ণ করে প্রুফ জমা দিলে এখানে পেন্ডিং ও অ্যাপ্রুভ স্ট্যাটাস দেখতে পাবেন।</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1893,10 +2001,28 @@
     }
 
     // ========================================================
-    // 4. TASK SYSTEM: PENDING STATUS & AUTO BALANCE ON APPROVE
+    // 4. WORK SUB-TABS & STATUS MANAGEMENT
     // ========================================================
+    function switchWorkSubTab(type) {
+      const tabAvail = document.getElementById('tabWorkAvailable');
+      const tabSubm = document.getElementById('tabWorkSubmitted');
+      const viewAvail = document.getElementById('workAvailableView');
+      const viewSubm = document.getElementById('workSubmittedView');
+
+      if (type === 'available') {
+        tabAvail.classList.add('active');
+        tabSubm.classList.remove('active');
+        viewAvail.style.display = 'block';
+        viewSubm.style.display = 'none';
+      } else {
+        tabSubm.classList.add('active');
+        tabAvail.classList.remove('active');
+        viewAvail.style.display = 'none';
+        viewSubm.style.display = 'block';
+      }
+    }
+
     function listenToUserTaskSubmissions(uid) {
-      // ইউজারের সাবমিট করা কাজসমূহ রিয়েলটাইমে মনিটর করা
       database.ref('user_tasks/' + uid).on('value', (snap) => {
         const data = snap.val() || {};
         window.userTasksStatus = data;
@@ -1908,7 +2034,7 @@
             const rewardAmt = parseInt(item.reward || 0);
             
             if (rewardAmt > 0) {
-              // অটোমেটিক ইউজারের ব্যালেন্সে টাকা যুক্ত করা
+              // অটোমেটিক ব্যালেন্সে টাকা যোগ করা
               database.ref('users/' + uid).transaction((uData) => {
                 if (uData) {
                   uData.balance = (uData.balance || 0) + rewardAmt;
@@ -1918,7 +2044,6 @@
                 return uData;
               }, (error, committed) => {
                 if (committed) {
-                  // ব্যালেন্সে যোগ সম্পন্ন হলে rewardCredited মার্ক করা যেন ডাবল যোগ না হয়
                   database.ref('user_tasks/' + uid + '/' + taskId).update({
                     rewardCredited: true
                   });
@@ -1929,11 +2054,12 @@
           }
         }
 
+        renderSubmittedTasksView(data);
         renderRecentWorkActivity(data);
-        loadWorkTasks();
+        loadWorkTasks(); // স্ট্যাটাস পরিবর্তন হলে কাজসমূহের তালিকা রিলোড করা
       });
 
-      // অ্যাডমিন যদি সরাসরি task_submissions এ আপডেট করে তবে তাও সিঙ্ক করা
+      // অ্যাডমিন সাইড সিঙ্ক
       database.ref('task_submissions').orderByChild('userUid').equalTo(uid).on('child_changed', (subSnap) => {
         const sub = subSnap.val();
         if (sub && sub.taskId && sub.status) {
@@ -1941,6 +2067,66 @@
             status: sub.status
           });
         }
+      });
+    }
+
+    function renderSubmittedTasksView(userTasks) {
+      const container = document.getElementById('submittedTasksList');
+      const badgeCount = document.getElementById('badgeSubmittedCount');
+      if (!container) return;
+
+      const keys = Object.keys(userTasks);
+      if (badgeCount) badgeCount.innerText = keys.length;
+
+      if (keys.length === 0) {
+        container.innerHTML = `
+          <div class="empty-work-card">
+            <div class="empty-work-icon">📭</div>
+            <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">এখনো কোনো কাজ জমা দেননি</h3>
+            <p style="font-size: 13px; color: #718096; line-height: 1.5;">"কাজসমূহ" ট্যাব থেকে কাজ সম্পূর্ণ করে প্রুফ জমা দিলে এখানে পেন্ডিং ও অ্যাপ্রুভ স্ট্যাটাস দেখতে পাবেন।</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      keys.reverse().forEach(tId => {
+        const item = userTasks[tId];
+        let statusBadge = '';
+        let noteText = item.note ? `<div style="font-size:12px; color:#475569; margin-top:4px;">💬 আপনার নোট: ${item.note}</div>` : '';
+
+        if (item.status === 'approved') {
+          statusBadge = `
+            <div class="task-status-banner status-banner-approved">
+              <span>✅ অনুমোদিত (Approved) - ব্যালেন্সে ৳${item.reward || 0} যোগ হয়েছে!</span>
+            </div>
+          `;
+        } else if (item.status === 'pending') {
+          statusBadge = `
+            <div class="task-status-banner status-banner-pending">
+              <span>⏳ পেন্ডিং (Pending) - অ্যাডমিন কাজের প্রমাণ যাচাই করছেন।</span>
+            </div>
+          `;
+        } else {
+          statusBadge = `
+            <div class="task-status-banner status-banner-rejected">
+              <span>❌ বাতিল (Rejected) - দয়া করে কাজের নিয়ম দেখে সঠিক স্ক্রিনশট দিন।</span>
+            </div>
+          `;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'subm-history-card';
+        card.innerHTML = `
+          <div class="subm-history-header">
+            <div class="subm-history-title">${item.title || 'কাজের শিরোনাম'}</div>
+            <div class="subm-history-reward">+ ৳${item.reward || 0}</div>
+          </div>
+          ${statusBadge}
+          ${noteText}
+          <div class="subm-history-time">📅 সাবমিট আইডি: #${(item.submissionId || tId).substring(0, 8)}</div>
+        `;
+        container.appendChild(card);
       });
     }
 
@@ -2040,6 +2226,18 @@
         for (let key in tasks) {
           const item = tasks[key];
           if (!item) continue;
+
+          // কাজের স্ট্যাটাস চেক
+          const userTask = (window.userTasksStatus && window.userTasksStatus[key]) ? window.userTasksStatus[key] : null;
+          const taskStatus = userTask ? userTask.status : null; 
+
+          // ==========================================
+          // কাজ Approved হলে "কাজসমূহ" লিস্ট থেকে লুকিয়ে রাখা হবে
+          // ==========================================
+          if (taskStatus === 'approved') {
+            continue; 
+          }
+
           count++;
 
           const title = item.title || item.name || 'নতুন কাজ';
@@ -2052,49 +2250,31 @@
           const reqScreenshots = parseInt(item.requiredScreenshots || item.screenshotCount || item.proofCount || 1) || 1;
           const adminScreenshots = extractAdminScreenshots(item);
 
-          // কাজের স্ট্যাটাস চেক
-          const userTask = (window.userTasksStatus && window.userTasksStatus[key]) ? window.userTasksStatus[key] : null;
-          const taskStatus = userTask ? userTask.status : null; // 'pending' | 'approved' | 'rejected' | null
-
           let statusCardClass = '';
           let statusBannerHTML = '';
           let submitButtonHTML = '';
 
-          if (taskStatus === 'approved') {
-            statusCardClass = 'task-approved';
-            statusBannerHTML = `
-              <div class="task-status-banner status-banner-approved">
-                <span>✅ এই কাজটি অনুমোদিত (Approved) হয়েছে এবং টাকা যুক্ত হয়েছে!</span>
-              </div>
-            `;
-            // একবার এপ্রুভ হয়ে গেলে বাটন ডিসেবল ও ব্লক
-            submitButtonHTML = `
-              <button class="btn-task-submit" style="background:#22c55e; opacity:0.9; cursor:not-allowed;" disabled>
-                ✅ কাজ সম্পন্ন হয়েছে
-              </button>
-            `;
-          } else if (taskStatus === 'pending') {
+          if (taskStatus === 'pending') {
             statusCardClass = 'task-pending';
             statusBannerHTML = `
               <div class="task-status-banner status-banner-pending">
-                <span>⏳ আপনার কাজটি বর্তমানে পেন্ডিং আছে (অ্যাডমিন যাচাই করছেন)।</span>
+                <span>⏳ আপনার কাজটি বর্তমানে পেন্ডিং আছে (যাচাই চলছে)।</span>
               </div>
             `;
-            // পেন্ডিং অবস্থায় দ্বিতীয়বার সাবমিট করতে পারবে না
             submitButtonHTML = `
               <button class="btn-task-submit" style="background:#f59e0b; opacity:0.9; cursor:not-allowed;" disabled>
-                ⏳ পেন্ডিং আছে (যাচাই চলছে)
+                ⏳ পেন্ডিং আছে
               </button>
             `;
           } else if (taskStatus === 'rejected') {
             statusBannerHTML = `
               <div class="task-status-banner status-banner-rejected">
-                <span>❌ পূর্বের প্রুফটি বাতিল হয়েছে। অনুগ্রহ করে সঠিক প্রমাণ পুনরায় জমা দিন।</span>
+                <span>❌ পূর্বের প্রুফটি বাতিল হয়েছে। পুনরায় জমা দিন।</span>
               </div>
             `;
             submitButtonHTML = `
               <button class="btn-task-submit" onclick="openTaskSubmissionModal('${key}')">
-                📤 পুনরায় প্রুফ জমা দিন
+                📤 পুনরায় জমা দিন
               </button>
             `;
           } else {
@@ -2111,11 +2291,11 @@
               <div class="admin-guide-box">
                 <div class="admin-guide-title">
                   <span>📸 কাজের নির্দেশিকা ছবি (${adminScreenshots.length}টি)</span>
-                  <span style="font-size:11px; font-weight:normal; color:#2563eb;">(বড় করে দেখতে ক্লিক করুন)</span>
+                  <span style="font-size:11px; font-weight:normal; color:#2563eb;">(ক্লিক করে বড় দেখুন)</span>
                 </div>
                 <div class="admin-guide-grid">
                   ${adminScreenshots.map((src, idx) => `
-                    <div class="admin-guide-card" onclick="viewFullImage('${src.replace(/'/g, "\\'")}')" title="ছবি #${idx+1} বড় করে দেখুন">
+                    <div class="admin-guide-card" onclick="viewFullImage('${src.replace(/'/g, "\\'")}')" title="ছবি #${idx+1}">
                       <img src="${src}" class="admin-guide-img" alt="Admin Guide ${idx+1}" />
                       <span class="admin-guide-overlay-tag">🔍 #${idx+1}</span>
                     </div>
@@ -2154,13 +2334,13 @@
             ${adminScreenshotsHTML}
             
             <div class="task-desc-box">
-              <div class="task-block-title">📝 কাজের বিবরণ ও নির্দেশিকা:</div>
+              <div class="task-block-title">📝 কাজের বিবরণ:</div>
               <div class="task-details-text">${desc}</div>
               ${rulesHTML}
             </div>
 
             <div class="task-actions">
-              <a href="${link}" target="_blank" class="btn-task-open">🌐 কাজের লিংক খুলুন</a>
+              <a href="${link}" target="_blank" class="btn-task-open">🌐 কাজের মূল লিংক</a>
               ${submitButtonHTML}
             </div>
           `;
@@ -2176,9 +2356,9 @@
       if (!container) return;
       container.innerHTML = `
         <div class="empty-work-card">
-          <div class="empty-work-icon">⏳</div>
-          <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">বর্তমানে কোনো কাজ নেই</h3>
-          <p style="font-size: 13px; color: #718096; line-height: 1.5;">অ্যাডমিন থেকে নতুন কোনো কাজ দেওয়া হলে এখানে দেখা যাবে।</p>
+          <div class="empty-work-icon">🎉</div>
+          <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">নতুন কোনো কাজ নেই</h3>
+          <p style="font-size: 13px; color: #718096; line-height: 1.5;">আপনার সমস্ত কাজ সম্পন্ন হয়েছে অথবা অ্যাডমিন থেকে নতুন কাজ আসা পর্যন্ত অপেক্ষা করুন।</p>
         </div>
       `;
     }
@@ -2189,7 +2369,6 @@
         return;
       }
 
-      // নিরাপত্তা চেক: কাজ অ্যাপ্রুভ বা পেন্ডিং থাকলে আর সাবমিট করা যাবে না
       const existingStatus = (window.userTasksStatus && window.userTasksStatus[taskId]) ? window.userTasksStatus[taskId].status : null;
       if (existingStatus === 'approved') {
         showToast('এই কাজটি ইতিমধ্যে সম্পন্ন ও অনুমোদিত হয়েছে!');
@@ -2271,7 +2450,7 @@
         const group = document.createElement('div');
         group.className = 'form-group';
         group.innerHTML = `
-          <label style="font-weight:600; color:#2d3748;">📷 আপনার কাজের স্ক্রিনশট ${reqScreenshots > 1 ? `#${i} (${reqScreenshots}টির মধ্যে)` : ''}:</label>
+          <label style="font-weight:600; color:#2d3748;">📷 কাজের স্ক্রিনশট ${reqScreenshots > 1 ? `#${i} (${reqScreenshots}টির মধ্যে)` : ''}:</label>
           <input type="file" class="task-proof-file-input" data-index="${i}" accept="image/*" />
         `;
         proofContainer.appendChild(group);
@@ -2354,20 +2533,19 @@
             screenshots: base64Images,
             screenshotCount: base64Images.length,
             note: note || 'কোনো নোট নেই',
-            status: 'pending', // সাবমিট করলে সবসময় পেন্ডিং থাকবে
+            status: 'pending',
             submittedAt: firebase.database.ServerValue.TIMESTAMP
           };
 
           const updates = {};
-          // ১. অ্যাডমিনের দেখার জন্য task_submissions
           updates['task_submissions/' + submissionKey] = submissionData;
-          // ২. ইউজারের নিজস্ব কাজ হিস্ট্রি ও স্ট্যাটাস ট্র্যাকিং
           updates['user_tasks/' + currentUser.uid + '/' + currentSelectedTask.id] = {
             status: 'pending',
             taskId: currentSelectedTask.id,
             title: currentSelectedTask.title,
             reward: currentSelectedTask.reward,
             submissionId: submissionKey,
+            note: note || '',
             rewardCredited: false,
             submittedAt: firebase.database.ServerValue.TIMESTAMP
           };
@@ -2376,7 +2554,8 @@
         })
         .then(() => {
           closeTaskModal();
-          showToast('কাজের প্রমাণ জমা হয়েছে! অ্যাডমিন যাচাই (Approve) করার পর ব্যালেন্সে টাকা যুক্ত হবে।');
+          showToast('কাজের প্রমাণ জমা হয়েছে! স্ট্যাটাস ট্যাবে বিস্তারিত দেখতে পাবেন।');
+          switchWorkSubTab('submitted');
         })
         .catch((error) => {
           console.error(error);
@@ -2625,7 +2804,6 @@
     }
 
     function loadDepositAndWithdrawHistory(uid) {
-      // ডিপোজিট হিস্ট্রি
       database.ref('deposits/' + uid).on('value', (snap) => {
         const list = document.getElementById('depositHistoryList');
         const data = snap.val();
@@ -2655,7 +2833,6 @@
         }
       });
 
-      // উইথড্র হিস্ট্রি
       database.ref('withdrawals/' + uid).on('value', (snap) => {
         const list = document.getElementById('withdrawHistoryList');
         const data = snap.val();
