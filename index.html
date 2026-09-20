@@ -384,19 +384,21 @@
       padding: 16px;
       margin-bottom: 16px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-      border-left: 5px solid #e52d27;
+      border-left: 5px solid #667eea;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      transition: all 0.3s ease;
     }
 
     .task-card.task-approved {
       border-left-color: #22c55e;
-      background: #fcfdfd;
+      background: #f6fef9;
     }
 
     .task-card.task-pending {
-      border-left-color: #eab308;
+      border-left-color: #f59e0b;
+      background: #fffdf5;
     }
 
     .task-header {
@@ -436,18 +438,18 @@
 
     /* Task Submission Status Badge */
     .task-status-banner {
-      padding: 7px 12px;
+      padding: 8px 12px;
       border-radius: 8px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
     }
     .status-banner-pending {
-      background: #fef9c3;
-      color: #854d0e;
-      border: 1px solid #fde047;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
     }
     .status-banner-approved {
       background: #dcfce7;
@@ -586,7 +588,7 @@
 
     .btn-task-submit {
       flex: 1;
-      background: linear-gradient(135deg, #e52d27 0%, #b31217 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
       padding: 10px 12px;
@@ -598,6 +600,7 @@
       align-items: center;
       justify-content: center;
       gap: 5px;
+      transition: all 0.2s;
     }
 
     .empty-work-card {
@@ -917,7 +920,7 @@
     }
 
     .nav-item.work-nav.active {
-      color: #ff0000;
+      color: #e52d27;
     }
 
     .nav-item .icon {
@@ -1364,9 +1367,9 @@
           <button class="btn" style="background:#054b2d; color:white; padding:6px 14px; font-size:12px;" onclick="navClick('team', document.getElementById('nav-team'))">রেফার করুন</button>
         </div>
 
-        <div class="section-title">সাম্প্রতিক লেনদেন</div>
-        <div class="card" id="homeRecentTransactions">
-          <div class="no-history-text">এখনো কোনো লেনদেন হয়নি</div>
+        <div class="section-title">সাম্প্রতিক কাজের আপডেট</div>
+        <div class="card" id="homeRecentWorkActivity">
+          <div class="no-history-text" id="recentWorkText">বর্তমানে কোনো কাজ সম্পন্ন হয়নি</div>
         </div>
       </div>
     </div>
@@ -1422,10 +1425,10 @@
         <div class="work-rules-banner">
           <h4>📜 কাজের সাধারণ নিয়মাবলী ও নির্দেশিকা:</h4>
           <ul>
-            <li>অ্যাডমিনের দেওয়া কাজের ছবি ও বিবরণ দেখে কাজটি নিখুঁতভাবে সম্পন্ন করুন।</li>
-            <li>স্ক্রিনশট জমা দিলে অ্যাডমিন ভেরিফাই করে অ্যাপ্রুভ করবেন।</li>
-            <li>অ্যাডমিন <strong>Approve</strong> করলেই স্বয়ংক্রিয়ভাবে ব্যালেন্সে টাকা যুক্ত হবে।</li>
-            <li>একবার কাজ অ্যাপ্রুভ হয়ে গেলে ওই কাজ আর দ্বিতীয়বার করা যাবে না।</li>
+            <li>অ্যাডমিনের দেওয়া কাজের ছবি ও নিয়ম দেখে সঠিক কাজটি সম্পূর্ণ করুন।</li>
+            <li>স্ক্রিনশট জমা দিলে অ্যাডমিন যাচাই করার আগ পর্যন্ত তা <strong>পেন্ডিং (Pending)</strong> থাকবে।</li>
+            <li>অ্যাডমিন <strong>Approve</strong> করলেই স্বয়ংক্রিয়ভাবে মূল ব্যালেন্সে টাকা যুক্ত হয়ে যাবে।</li>
+            <li>একবার কোনো কাজ অনুমোদিত হয়ে গেলে সেটি আর দ্বিতীয়বার করা যাবে না।</li>
           </ul>
         </div>
 
@@ -1436,8 +1439,8 @@
         <div id="workTasksList">
           <div class="empty-work-card" id="emptyWorkPlaceholder">
             <div class="empty-work-icon">⏳</div>
-            <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">বর্তমানে কোনো কাজ নেই</h3>
-            <p style="font-size: 13px; color: #718096; line-height: 1.5;">অ্যাডমিন প্যানেল থেকে কোনো কাজ দেওয়া হলে এখানে দেখতে পাবেন।</p>
+            <h3 style="font-size: 16px; color: #2d3748; margin-bottom: 6px; font-weight: 700;">কাজ লোড হচ্ছে...</h3>
+            <p style="font-size: 13px; color: #718096; line-height: 1.5;">দয়া করে কিছুক্ষণ অপেক্ষা করুন।</p>
           </div>
         </div>
       </div>
@@ -1652,7 +1655,7 @@
     let currentUser = null;
     let currentSelectedTask = null;
     window.allLoadedTasks = {};
-    window.userTasksStatus = {}; // ইউজারের কাজসমূহের বর্তমান স্ট্যাটাস
+    window.userTasksStatus = {}; 
 
     let state = {
       name: "ব্যবহারকারী",
@@ -1670,7 +1673,7 @@
       return phone.replace(/[^0-9]/g, '');
     }
 
-    // URL থেকে রেফার কোড রিসিভ
+    // URL থেকে রেফার কোড হ্যান্ডলিং
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const refParam = urlParams.get('ref');
@@ -1842,6 +1845,7 @@
 
         loadReferralTeam(user.uid);
         listenToUserTaskSubmissions(user.uid);
+        loadDepositAndWithdrawHistory(user.uid);
       } else {
         currentUser = null;
         document.getElementById('authView').style.display = 'flex';
@@ -1889,43 +1893,91 @@
     }
 
     // ========================================================
-    // 4. TASK SUBMISSIONS LISTENER & AUTO-BALANCE ADDITION
+    // 4. TASK SYSTEM: PENDING STATUS & AUTO BALANCE ON APPROVE
     // ========================================================
     function listenToUserTaskSubmissions(uid) {
+      // ইউজারের সাবমিট করা কাজসমূহ রিয়েলটাইমে মনিটর করা
       database.ref('user_tasks/' + uid).on('value', (snap) => {
         const data = snap.val() || {};
         window.userTasksStatus = data;
 
-        // চেক করা কোনো কাজ Approve হয়েছে কিনা এবং ব্যালেন্সে অ্যাড করা বাকি কিনা
+        // চেক করা: অ্যাডমিন কাজ Approve করেছে কিনা এবং ব্যালেন্সে অ্যাড হয়েছে কিনা
         for (let taskId in data) {
           const item = data[taskId];
           if (item && item.status === 'approved' && item.rewardCredited !== true) {
             const rewardAmt = parseInt(item.reward || 0);
+            
             if (rewardAmt > 0) {
-              // ইউজারের মূল ব্যালেন্সে টাকা যুক্ত করা
-              database.ref('users/' + uid).once('value', (uSnap) => {
-                const uData = uSnap.val() || {};
-                const newBal = (uData.balance || 0) + rewardAmt;
-                const newWorkInc = (uData.workIncome || 0) + rewardAmt;
-                const newTotInc = (uData.totalIncome || 0) + rewardAmt;
-
-                database.ref('users/' + uid).update({
-                  balance: newBal,
-                  workIncome: newWorkInc,
-                  totalIncome: newTotInc
-                }).then(() => {
+              // অটোমেটিক ইউজারের ব্যালেন্সে টাকা যুক্ত করা
+              database.ref('users/' + uid).transaction((uData) => {
+                if (uData) {
+                  uData.balance = (uData.balance || 0) + rewardAmt;
+                  uData.workIncome = (uData.workIncome || 0) + rewardAmt;
+                  uData.totalIncome = (uData.totalIncome || 0) + rewardAmt;
+                }
+                return uData;
+              }, (error, committed) => {
+                if (committed) {
+                  // ব্যালেন্সে যোগ সম্পন্ন হলে rewardCredited মার্ক করা যেন ডাবল যোগ না হয়
                   database.ref('user_tasks/' + uid + '/' + taskId).update({
                     rewardCredited: true
                   });
                   showToast(`🎉 অভিনন্দন! কাজের ৳${rewardAmt} ব্যালেন্সে যুক্ত হয়েছে!`);
-                });
+                }
               });
             }
           }
         }
 
-        // টাস্ক লিস্ট রেন্ডার
+        renderRecentWorkActivity(data);
         loadWorkTasks();
+      });
+
+      // অ্যাডমিন যদি সরাসরি task_submissions এ আপডেট করে তবে তাও সিঙ্ক করা
+      database.ref('task_submissions').orderByChild('userUid').equalTo(uid).on('child_changed', (subSnap) => {
+        const sub = subSnap.val();
+        if (sub && sub.taskId && sub.status) {
+          database.ref('user_tasks/' + uid + '/' + sub.taskId).update({
+            status: sub.status
+          });
+        }
+      });
+    }
+
+    function renderRecentWorkActivity(userTasks) {
+      const recentBox = document.getElementById('homeRecentWorkActivity');
+      if (!recentBox) return;
+
+      const keys = Object.keys(userTasks);
+      if (keys.length === 0) {
+        recentBox.innerHTML = '<div class="no-history-text">বর্তমানে কোনো কাজ সম্পন্ন হয়নি</div>';
+        return;
+      }
+
+      recentBox.innerHTML = '';
+      keys.slice(-3).reverse().forEach(tId => {
+        const t = userTasks[tId];
+        let statusBadge = '';
+        if (t.status === 'approved') {
+          statusBadge = '<span class="status-badge" style="background:#e6f9ed; color:#155724;">অনুমোদিত (+ ৳'+(t.reward||0)+')</span>';
+        } else if (t.status === 'pending') {
+          statusBadge = '<span class="status-badge" style="background:#fef3c7; color:#92400e;">যাচাই চলছে (Pending)</span>';
+        } else {
+          statusBadge = '<span class="status-badge" style="background:#fee2e2; color:#b91c1c;">বাতিল (Rejected)</span>';
+        }
+
+        const row = document.createElement('div');
+        row.className = 'history-item';
+        row.innerHTML = `
+          <div>
+            <div style="font-weight:600; font-size:13px;">${t.title || 'কাজের বিবরণ'}</div>
+            <div style="font-size:11px; color:#888;">স্ট্যাটাস আপডেট</div>
+          </div>
+          <div style="text-align:right;">
+            ${statusBadge}
+          </div>
+        `;
+        recentBox.appendChild(row);
       });
     }
 
@@ -1949,15 +2001,9 @@
         list = list.concat(item.screenshots.includes(',') && !item.screenshots.startsWith('data:image') ? item.screenshots.split(',').map(s => s.trim()) : [item.screenshots.trim()]);
       }
 
-      if (item.image && typeof item.image === 'string' && item.image.length > 5) {
-        list.push(item.image.trim());
-      }
-      if (item.taskImage && typeof item.taskImage === 'string' && item.taskImage.length > 5) {
-        list.push(item.taskImage.trim());
-      }
-      if (item.screenshot && typeof item.screenshot === 'string' && item.screenshot.length > 5) {
-        list.push(item.screenshot.trim());
-      }
+      if (item.image && typeof item.image === 'string' && item.image.length > 5) list.push(item.image.trim());
+      if (item.taskImage && typeof item.taskImage === 'string' && item.taskImage.length > 5) list.push(item.taskImage.trim());
+      if (item.screenshot && typeof item.screenshot === 'string' && item.screenshot.length > 5) list.push(item.screenshot.trim());
 
       return [...new Set(list)].filter(url => url && url.length > 5);
     }
@@ -2000,15 +2046,15 @@
           const subtitle = item.subtitle || item.shortTitle || item.shortDesc || item.tag || '';
           const link = item.link || item.url || '#';
           const reward = item.reward || item.amount || 0;
-          const desc = item.desc || item.description || item.details || 'অ্যাডমিনের দেওয়া কাজের নিয়ম দেখে সঠিক কাজটি খুঁজুন ও সম্পন্ন করুন।';
+          const desc = item.desc || item.description || item.details || 'অ্যাডমিনের দেওয়া কাজের নিয়ম দেখে সঠিক কাজটি সম্পূর্ণ করুন।';
           const rules = item.rules || item.terms || item.conditions || item.instruction || '';
 
           const reqScreenshots = parseInt(item.requiredScreenshots || item.screenshotCount || item.proofCount || 1) || 1;
           const adminScreenshots = extractAdminScreenshots(item);
 
-          // ইউজারের কাজের সাবমিশন স্ট্যাটাস চেক
+          // কাজের স্ট্যাটাস চেক
           const userTask = (window.userTasksStatus && window.userTasksStatus[key]) ? window.userTasksStatus[key] : null;
-          const taskStatus = userTask ? userTask.status : null; // 'pending', 'approved', 'rejected', or null
+          const taskStatus = userTask ? userTask.status : null; // 'pending' | 'approved' | 'rejected' | null
 
           let statusCardClass = '';
           let statusBannerHTML = '';
@@ -2018,9 +2064,10 @@
             statusCardClass = 'task-approved';
             statusBannerHTML = `
               <div class="task-status-banner status-banner-approved">
-                <span>✅ এই কাজটি অনুমোদিত (Approved) হয়েছে। আপনার ব্যালেন্সে টাকা যুক্ত হয়েছে!</span>
+                <span>✅ এই কাজটি অনুমোদিত (Approved) হয়েছে এবং টাকা যুক্ত হয়েছে!</span>
               </div>
             `;
+            // একবার এপ্রুভ হয়ে গেলে বাটন ডিসেবল ও ব্লক
             submitButtonHTML = `
               <button class="btn-task-submit" style="background:#22c55e; opacity:0.9; cursor:not-allowed;" disabled>
                 ✅ কাজ সম্পন্ন হয়েছে
@@ -2033,15 +2080,16 @@
                 <span>⏳ আপনার কাজটি বর্তমানে পেন্ডিং আছে (অ্যাডমিন যাচাই করছেন)।</span>
               </div>
             `;
+            // পেন্ডিং অবস্থায় দ্বিতীয়বার সাবমিট করতে পারবে না
             submitButtonHTML = `
-              <button class="btn-task-submit" style="background:#eab308; opacity:0.9; cursor:not-allowed;" disabled>
+              <button class="btn-task-submit" style="background:#f59e0b; opacity:0.9; cursor:not-allowed;" disabled>
                 ⏳ পেন্ডিং আছে (যাচাই চলছে)
               </button>
             `;
           } else if (taskStatus === 'rejected') {
             statusBannerHTML = `
               <div class="task-status-banner status-banner-rejected">
-                <span>❌ পূর্বের প্রুফটি বাতিল হয়েছে। দয়া করে সঠিক প্রুফ পুনরায় জমা দিন।</span>
+                <span>❌ পূর্বের প্রুফটি বাতিল হয়েছে। অনুগ্রহ করে সঠিক প্রমাণ পুনরায় জমা দিন।</span>
               </div>
             `;
             submitButtonHTML = `
@@ -2062,7 +2110,7 @@
             adminScreenshotsHTML = `
               <div class="admin-guide-box">
                 <div class="admin-guide-title">
-                  <span>📸 অ্যাডমিনের কাজের নির্দেশিকা ছবি (${adminScreenshots.length}টি)</span>
+                  <span>📸 কাজের নির্দেশিকা ছবি (${adminScreenshots.length}টি)</span>
                   <span style="font-size:11px; font-weight:normal; color:#2563eb;">(বড় করে দেখতে ক্লিক করুন)</span>
                 </div>
                 <div class="admin-guide-grid">
@@ -2141,7 +2189,7 @@
         return;
       }
 
-      // চেক করা কাজ ইতিমধ্যে করা বা পেন্ডিং আছে কিনা
+      // নিরাপত্তা চেক: কাজ অ্যাপ্রুভ বা পেন্ডিং থাকলে আর সাবমিট করা যাবে না
       const existingStatus = (window.userTasksStatus && window.userTasksStatus[taskId]) ? window.userTasksStatus[taskId].status : null;
       if (existingStatus === 'approved') {
         showToast('এই কাজটি ইতিমধ্যে সম্পন্ন ও অনুমোদিত হয়েছে!');
@@ -2306,14 +2354,14 @@
             screenshots: base64Images,
             screenshotCount: base64Images.length,
             note: note || 'কোনো নোট নেই',
-            status: 'pending',
+            status: 'pending', // সাবমিট করলে সবসময় পেন্ডিং থাকবে
             submittedAt: firebase.database.ServerValue.TIMESTAMP
           };
 
           const updates = {};
-          // ১. অ্যাডমিনদের সার্বিক লিস্টের জন্য
+          // ১. অ্যাডমিনের দেখার জন্য task_submissions
           updates['task_submissions/' + submissionKey] = submissionData;
-          // ২. ইউজারের নিজস্ব কাজ হিস্ট্রি ও স্ট্যাটাস ট্র্যাকিংয়ের জন্য
+          // ২. ইউজারের নিজস্ব কাজ হিস্ট্রি ও স্ট্যাটাস ট্র্যাকিং
           updates['user_tasks/' + currentUser.uid + '/' + currentSelectedTask.id] = {
             status: 'pending',
             taskId: currentSelectedTask.id,
@@ -2328,7 +2376,7 @@
         })
         .then(() => {
           closeTaskModal();
-          showToast('কাজের প্রমাণ জমা হয়েছে! অ্যাডমিন যাচাই করার পর টাকা ব্যালেন্সে যুক্ত হবে।');
+          showToast('কাজের প্রমাণ জমা হয়েছে! অ্যাডমিন যাচাই (Approve) করার পর ব্যালেন্সে টাকা যুক্ত হবে।');
         })
         .catch((error) => {
           console.error(error);
@@ -2574,6 +2622,68 @@
       showToast(`৳${amount} উইথড্র রিকোয়েস্ট জমা হয়েছে`);
       document.getElementById('withdrawAmount').value = '';
       document.getElementById('accountNumber').value = '';
+    }
+
+    function loadDepositAndWithdrawHistory(uid) {
+      // ডিপোজিট হিস্ট্রি
+      database.ref('deposits/' + uid).on('value', (snap) => {
+        const list = document.getElementById('depositHistoryList');
+        const data = snap.val();
+        if (!data) {
+          list.innerHTML = '<div class="no-history-text">কোনো ডিপোজিট হিস্ট্রি নেই</div>';
+          return;
+        }
+        list.innerHTML = '';
+        for (let k in data) {
+          const item = data[k];
+          let statusBadge = item.status === 'approved' 
+            ? '<span class="status-badge" style="background:#e6f9ed; color:#155724;">অনুমোদিত</span>'
+            : '<span class="status-badge" style="background:#fef3c7; color:#92400e;">পেন্ডিং</span>';
+          
+          const row = document.createElement('div');
+          row.className = 'history-item';
+          row.innerHTML = `
+            <div>
+              <div style="font-weight:600; font-size:13px;">${item.method || 'ডিপোজিট'} (৳${item.amount})</div>
+              <div style="font-size:11px; color:#888;">${item.senderNumber || ''}</div>
+            </div>
+            <div style="text-align:right;">
+              ${statusBadge}
+            </div>
+          `;
+          list.appendChild(row);
+        }
+      });
+
+      // উইথড্র হিস্ট্রি
+      database.ref('withdrawals/' + uid).on('value', (snap) => {
+        const list = document.getElementById('withdrawHistoryList');
+        const data = snap.val();
+        if (!data) {
+          list.innerHTML = '<div class="no-history-text">কোনো উইথড্র হিস্ট্রি নেই</div>';
+          return;
+        }
+        list.innerHTML = '';
+        for (let k in data) {
+          const item = data[k];
+          let statusBadge = item.status === 'approved' 
+            ? '<span class="status-badge" style="background:#e6f9ed; color:#155724;">অনুমোদিত</span>'
+            : '<span class="status-badge" style="background:#fef3c7; color:#92400e;">পেন্ডিং</span>';
+          
+          const row = document.createElement('div');
+          row.className = 'history-item';
+          row.innerHTML = `
+            <div>
+              <div style="font-weight:600; font-size:13px;">${item.method || 'উইথড্র'} (৳${item.amount})</div>
+              <div style="font-size:11px; color:#888;">${item.accountNumber || ''}</div>
+            </div>
+            <div style="text-align:right;">
+              ${statusBadge}
+            </div>
+          `;
+          list.appendChild(row);
+        }
+      });
     }
 
     function copyText(text, msg) {
